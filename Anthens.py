@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as pl
 import scipy as sc
 import math as math
-from mpl_toolkits.mplot3d import axes3d
 import time as time
 
 t0=time.clock()
@@ -136,37 +135,22 @@ def F(theta,phi,n): #Páxina 253
             #aux+=I[m] * np.cos(kt*rho[m,0]*np.cos(beta[m,n])*np.sin(theta)*np.cos(phi)) * np.cos(kt*rho[m,0]*np.sin(beta[m,n])*np.sin(theta)*np.sin(phi))       
     return 4*aux
 
+
+F1=np.abs(F(c,0,n))
+F1=F1/max(F1)
+
+for i in range(len(F1)):
+    F1[i]=20*math.log10(F1[i])
+
+#Esta interesa 
 '''
-Z=np.zeros([len(c),len(c)])
-
-for i in range(len(c)):
-     for j in range(len(c)):
-        Z[i,j]=np.abs(F(c[i],np.arctan(c[j]/c[i]),n))
-
-Z=Z/np.max(Z)
-
-for i in range(len(c)):
-     for j in range(len(c)):
-        Z[i,j]=20*math.log10(Z[i,j])
-
-pl.figure(-)
-pl.imshow(Z)
-'''
-
-
-F=np.abs(F(c,0,n))
-F=F/max(F)
-
-for i in range(len(F)):
-    F[i]=20*math.log10(F[i])
-
 pl.figure(5) #Páxina 254
-pl.plot(c,F,label=u'-')
+pl.plot(c,F1,label=u'-')
 pl.xlabel('$\Theta$ (rad)')
 pl.legend(loc='upper right')
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
-#pl.savefig('---.png',dpi=300)
+#pl.savefig('---.png',dpi=300)'''
 
 
 u=[0,1.4839, 1.8933, 2.9268, 3.9622, 5.0416]
@@ -182,7 +166,8 @@ F3=np.abs(G1(c,n));F3=F3/max(F3)
 for i in range(len(F3)):
     F3[i]=20*math.log10(F3[i])
 
-
+#Estas dúas interesan
+'''
 pl.figure(6) #Mesmo do principio, modificando diferente a posición dos raíces
 pl.plot(c,F2,label=u'n=%i'%n)
 pl.legend(loc='upper right')
@@ -197,11 +182,42 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,20)
 pl.xlabel('Segundo caso')
-#pl.savefig('---.png',dpi=300)
+#pl.savefig('---.png',dpi=300)'''
+
+
+
+x=np.arange(-np.pi/2,np.pi/2,0.01); x=np.delete(x,np.where(x==0))
+y=np.arange(-np.pi/2,np.pi/2,0.01); y=np.delete(x,np.where(x==0))
+X,Y=np.meshgrid(x,y)
+        
+phi=np.abs(np.arctan(X/Y))
+r=np.sqrt(X**2+Y**2)
+
+z=np.abs(F(r,phi,n)) #Libro
+
+nf,nc=np.shape(z)
+Z=np.zeros([nf,nc])
+
+for i in range(nf):
+    for j in range(nc):
+        Z[i,j]=20*math.log10(z[i,j])
+
+Z=Z-np.max(Z)
+
+#Representación 3D
+'''
+fig = pl.figure()
+ax = pl.axes(projection='3d')
+ax.contour3D(X, Y, Z, 100, cmap='viridis')
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('z')
+
+#ax.view_init(0, 0)
+#pl.savefig('3D.png',dpi=500)'''
 
 
 
 
-print 'Tempo de execución:',time.clock()-t0
-
+print 'Tempo de execución:',time.clock()-t0,'(s)'
 
