@@ -3,7 +3,9 @@ import numpy as np
 import matplotlib.pyplot as pl
 import scipy as sc
 import math as math
+from mpl_toolkits.mplot3d import Axes3D
 import time as time
+#from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
 t0=time.clock()
 #Parámetros
@@ -107,34 +109,71 @@ matrix=np.loadtxt('datos.txt')
 N=matrix[0]; I2=matrix[1]
 
 
-lamb=2.1213203435596424 #npi
+lamb=2.12 #npi
 a=5*lamb; d=a/10 #Distancia uniforme entre círculos
-kt=3
+kt=2*np.pi/lamb
 
 
-M=len(N); ka=int(max(N)/4)
+M=len(N); ka=int(max(N)) #Para meter de novo simetría facemos ka=int(max(N)/4). Ollo liña 147.
 rho=np.zeros([M,ka]); beta=np.zeros([M,ka])
 
+
+#Parametrización da elipse
+'''d1=1; D1=1
+for i in range(M):
+    for j in range(ka):
+        if i!=0:
+            phi=np.arctan(float(j)/i)
+        else:
+            phi=np.pi/2
+        rho[i,j]=(2*j+1)*d1*D1/np.sqrt((d1*np.sin(phi))**2+(D1*np.cos(phi))**2)
+        beta[i,j]=(2*j+1)*np.pi/N[i]'''
+        
+
 for i in range(M): #Páxina 249
-     for j in range(ka):
-         rho[i,j]=d*np.sqrt((i+0.5)**2+(j+0.5)**2)
-         beta[i,j]=(2*j+1)*np.pi/N[i]
-'''
-pl.figure(4) 
-pl.imshow(rho)
-pl.xlabel('Raios')'''
+    for j in range(ka):
+        rho[i,j]=d*np.sqrt((i+0.5)**2+(j+0.5)**2) #Podo eliminar unha dimensión
+        beta[i,j]=(2*j+1)*np.pi/N[i]
+
+#-----
+#'''
+for i in range(M):
+    for j in range(ka):
+        beta[i,j]=(2*j+1)*np.pi/N[i]
+
+c1=np.arange(-M/2,M/2,0.1)
+c2=np.arange(-M/2,M/2,0.1) 
+X,Y=np.meshgrid(c1,c2)
+r=np.round(np.sqrt(X**2+Y**2),0) 
+
+nun=np.zeros(M/2)
+for i in range(M/2): #nun=[  1.   8.  12.  16.  32.]
+    nun[i]=np.count_nonzero(r==i)
+I=g0(r*np.pi/a,n)
+
+
+
+I=g0(rho*np.pi/a,n)
 
 def F(theta,phi,n): #Páxina 253
-    I=np.zeros([M,ka])
-    I=g0(rho[:,0]*np.pi/a,n) #Non depende de a, pois se normaliza     
-
     aux=0
-    for m in range(10):
-        for n in range(int(N[m]/4)):
-            aux+=I2[m] * np.cos(kt*rho[m,0]*np.cos(beta[m,n])*np.sin(theta)*np.cos(phi)) * np.cos(kt*rho[m,0]*np.sin(beta[m,n])*np.sin(theta)*np.sin(phi))       
-            #aux+=I[m] * np.cos(kt*rho[m,0]*np.cos(beta[m,n])*np.sin(theta)*np.cos(phi)) * np.cos(kt*rho[m,0]*np.sin(beta[m,n])*np.sin(theta)*np.sin(phi))       
-    return 4*aux
+    for m in range(M):
+        for n in range(int(N[m])):                
+            aux+=I[m,0] * np.cos(kt*rho[m,0]*np.cos(beta[m,n])*np.sin(theta)*np.cos(phi)) * np.cos(kt*rho[m,0]*np.sin(beta[m,n])*np.sin(theta)*np.sin(phi))       
+    return aux
 
+'''
+#-----
+
+I=g0(rho*np.pi/a,n)
+
+def F(theta,phi,n): #Páxina 253
+    aux=0
+    for m in range(M):
+        for n in range(int(N[m])):                
+            aux+=I[m,0] * np.cos(kt*rho[m,0]*np.cos(beta[m,n])*np.sin(theta)*np.cos(phi)) * np.cos(kt*rho[m,0]*np.sin(beta[m,n])*np.sin(theta)*np.sin(phi))       
+    return aux
+'''
 
 F1=np.abs(F(c,0,n))
 F1=F1/max(F1)
@@ -143,14 +182,14 @@ for i in range(len(F1)):
     F1[i]=20*math.log10(F1[i])
 
 #Esta interesa 
-'''
+
 pl.figure(5) #Páxina 254
 pl.plot(c,F1,label=u'-')
 pl.xlabel('$\Theta$ (rad)')
 pl.legend(loc='upper right')
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
-#pl.savefig('---.png',dpi=300)'''
+#pl.savefig('---.png',dpi=300)
 
 
 u=[0,1.4839, 1.8933, 2.9268, 3.9622, 5.0416]
@@ -174,7 +213,7 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,20)
 pl.xlabel('Primeiro caso')
-#pl.savefig('---.png',dpi=300)
+pl.savefig('Caso1.png',dpi=300)
 
 pl.figure(7) #Segundo caso
 pl.plot(c,F3,label=u'n=%i'%n)
@@ -182,8 +221,8 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,20)
 pl.xlabel('Segundo caso')
-#pl.savefig('---.png',dpi=300)'''
-
+pl.savefig('Caso2.png',dpi=300)
+'''
 
 
 x=np.arange(-np.pi/2,np.pi/2,0.01); x=np.delete(x,np.where(x==0))
@@ -211,10 +250,10 @@ ax = pl.axes(projection='3d')
 ax.contour3D(X, Y, Z, 100, cmap='viridis')
 ax.set_xlabel('x')
 ax.set_ylabel('y')
-ax.set_zlabel('z')
+ax.set_zlabel('z')'''
 
 #ax.view_init(0, 0)
-#pl.savefig('3D.png',dpi=500)'''
+#pl.savefig('3D.png',dpi=500)
 
 
 
