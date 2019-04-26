@@ -234,7 +234,7 @@ pl.xlim(0,np.pi)
 #pl.ylim(0,1)
 #pl.savefig('Anthens3.png',dpi=300)'''
 
-
+'''
 x=np.arange(-10,10,0.1); x=np.delete(x,np.where(x==0))
 y=np.arange(-10,10,0.1); y=np.delete(x,np.where(x==0))
 X,Y=np.meshgrid(x,y)
@@ -242,9 +242,9 @@ X,Y=np.meshgrid(x,y)
 phi=np.abs(np.arctan(X/Y))
 r=np.sqrt(X**2+Y**2)
 
-nf,nc=np.shape(Z)
 Z=np.abs(Fim(r,n)) #Libro
 Z=Z/np.max(Z)
+nf,nc=np.shape(Z)
 
 for i in range(nf):
     for j in range(nc):
@@ -260,8 +260,8 @@ ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 
 #ax.set_zlim(-50,0)
-#ax.view_init(0, 0)
-#pl.savefig('3D.png',dpi=500)'''
+pl.savefig('3D.png',dpi=500)
+#ax.view_init(0, 0)'''
 
 
 
