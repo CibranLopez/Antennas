@@ -72,7 +72,7 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,10)
 #pl.savefig('Anthens2.png',dpi=300)'''
-
+print u
 def G2(m,n): #Función F
     if m==0:
         return 1
@@ -87,24 +87,24 @@ def G2(m,n): #Función F
         return -f0(np.pi*zeros[m])*h1/h2
 
 def g0(x,n): #Aplicado L'Hôpital
-    h=0
+    aux=0+1j*0
     for i in range(n):
-        h+=((G2(i,n)*f0(x*zeros[i]))/(f0(np.pi*zeros[i])**2))
-    return 4*h/(np.pi**2)
+        aux+=((G2(i,n)*f0(x*zeros[i]))/(f0(np.pi*zeros[i])**2))
+    return 4*aux/(np.pi**2)
 
 g=np.abs(g0(c,n))
 g=g/max(g)
 
-'''
+
 pl.figure(3)
-pl.plot(c,g,label=u'Abertura')
+pl.plot(c,g,label=u'Abertura 1')
 pl.legend(loc='upper left')
 pl.xlim(0,np.pi)
 pl.ylim(0,1)
 #pl.savefig('Anthens3.png',dpi=300)'''
 
 
-#Páxina 254 ---------------------------------------------------------------------
+#Páxina 254 -----------------------------------------------------------------
 
 N=np.loadtxt('datos.txt')[0]
 
@@ -159,7 +159,7 @@ caso2=np.abs(G1(c,n)); caso2=caso2/max(caso2)
 #Caso 3 ---------------------------------------------------------------------
     
 u=[0, 0.5967, 1.7837, 3.6420, 4.3039, 5.2129]
-v=[0, 0.5225, 0.5268, 0, 0, 0]
+v=[0, 0.5225, -0.5268, 0, 0, 0]
 
 def Fim(x,n): #Traballando con imaxinarios
     h1=1
@@ -172,27 +172,13 @@ def Fim(x,n): #Traballando con imaxinarios
 
 caso3=np.abs(Fim(c,n)); caso3=caso3/max(caso3)
 
-def Lopital(m,n):
-    if m==0:
-        return 1
-    else:
-        h1=1
-        for j in np.arange(1,n):
-            h1*=(np.sqrt(u[j]**4+v[j]**4+zeros[m]**4+2*u[j]**2*v[j]**2+2*zeros[m]**2*(v[j]**2-u[j]**2))/(u[j]**2+v[j]**2))
-        h2=1
-        for j in np.arange(1,n):
-            if m!=j:
-                h2*=(1-(zeros[m]/zeros[j])**2)
-        return -f0(np.pi*zeros[m])*h1/h2
 
-def gim(x,n):
-    h=0
-    for i in range(n):
-        h+=((Lopital(i,n)*f0(x*zeros[i]))/(f0(np.pi*zeros[i])**2))
-    return 4*h/(np.pi**2)
+for i in range(len(u)):
+    u[i]=u[i]+1j*v[i]
 
-g=gim(c,n)
-g=g/max(g)
+
+distrbn=np.real(g0(c,n))
+distrbn=distrbn/max(distrbn)
 
 
 for i in range(len(caso3)):
@@ -227,7 +213,7 @@ pl.xlabel('Terceiro caso')
 #pl.savefig('Caso3.png',dpi=300)'''
 
 pl.figure(8)
-pl.plot(c,g,label=u'Amplitude')
+pl.plot(c,distrbn,label=u'Abertura 2')
 #pl.plot(c,g,label=u'Fase')
 pl.legend(loc='upper right')
 pl.xlim(0,np.pi)
@@ -259,10 +245,10 @@ ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 
+
 #ax.set_zlim(-50,0)
 pl.savefig('3D.png',dpi=500)
 #ax.view_init(0, 0)'''
-
 
 
 
