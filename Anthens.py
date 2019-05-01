@@ -72,7 +72,7 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,10)
 #pl.savefig('Anthens2.png',dpi=300)'''
-print u
+
 def G2(m,n): #Función F
     if m==0:
         return 1
@@ -95,7 +95,7 @@ def g0(x,n): #Aplicado L'Hôpital
 g=np.abs(g0(c,n))
 g=g/max(g)
 
-
+'''
 pl.figure(3)
 pl.plot(c,g,label=u'Abertura 1')
 pl.legend(loc='upper left')
@@ -159,7 +159,7 @@ caso2=np.abs(G1(c,n)); caso2=caso2/max(caso2)
 #Caso 3 ---------------------------------------------------------------------
     
 u=[0, 0.5967, 1.7837, 3.6420, 4.3039, 5.2129]
-v=[0, 0.5225, -0.5268, 0, 0, 0]
+v=[0, 0.5225, 0.5268, 0, 0, 0]
 
 def Fim(x,n): #Traballando con imaxinarios
     h1=1
@@ -175,10 +175,14 @@ caso3=np.abs(Fim(c,n)); caso3=caso3/max(caso3)
 
 for i in range(len(u)):
     u[i]=u[i]+1j*v[i]
+    
+distrbn=g0(c,n)
+
+phi=np.angle(distrbn)
 
 
-distrbn=np.real(g0(c,n))
-distrbn=distrbn/max(distrbn)
+distrbn=np.absolute(distrbn)
+distrbn=distrbn/np.max(distrbn)
 
 
 for i in range(len(caso3)):
@@ -214,11 +218,15 @@ pl.xlabel('Terceiro caso')
 
 pl.figure(8)
 pl.plot(c,distrbn,label=u'Abertura 2')
-#pl.plot(c,g,label=u'Fase')
 pl.legend(loc='upper right')
 pl.xlim(0,np.pi)
-#pl.ylim(0,1)
-#pl.savefig('Anthens3.png',dpi=300)'''
+#pl.savefig('Abertura2.png',dpi=300)
+
+pl.figure(9)
+pl.plot(c,phi,label=u'Fase')
+pl.legend(loc='upper right')
+pl.xlim(0,np.pi)
+#pl.savefig('Fase.png',dpi=300)'''
 
 '''
 x=np.arange(-10,10,0.1); x=np.delete(x,np.where(x==0))
@@ -235,6 +243,8 @@ nf,nc=np.shape(Z)
 for i in range(nf):
     for j in range(nc):
         Z[i,j]=10*math.log10(Z[i,j])
+        
+
 
 #Representación 3D
         
@@ -244,10 +254,10 @@ ax.plot_surface(X, Y, Z, cmap='viridis')
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
+ax.grid(False)
 
-
-#ax.set_zlim(-50,0)
-pl.savefig('3D.png',dpi=500)
+ax.set_zlim(-50,0)
+#pl.savefig('3D.png',dpi=500)
 #ax.view_init(0, 0)'''
 
 
