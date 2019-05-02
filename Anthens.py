@@ -214,7 +214,7 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,10)
 pl.xlabel('Terceiro caso')
-#pl.savefig('Caso3.png',dpi=300)'''
+#pl.savefig('Caso3.png',dpi=300)
 
 pl.figure(8)
 pl.plot(c,distrbn,label=u'Abertura 2')
@@ -227,6 +227,45 @@ pl.plot(c,phi,label=u'Fase')
 pl.legend(loc='upper right')
 pl.xlim(0,np.pi)
 #pl.savefig('Fase.png',dpi=300)'''
+
+
+#Expansión 6.99 -------------------------------------------------------------
+
+k=4; infty=90
+N=np.arange(1,10,1)*k
+d=0.5 #Distancia uniforme entre círculos
+M=len(N); ka=10
+rho=np.zeros(M); beta=np.zeros([M,ka])
+        
+for i in range(M):
+    for j in range(ka):
+        rho[i]=d*(i+0.5)
+        beta[i,j]=(2*j+1)*np.pi/N[i]
+
+I=g0(rho*np.pi/5,n)
+
+def F(theta,phi,n): #Páxina 253
+    aux=0
+    for m in range(M):
+        aux+=N[m]*I[m]*f0(10*np.sin(theta)*rho[m])
+    for m in range(M):
+        for s in range(infty):
+            aux+=2*(-1)**s*N[m]*I[m]*sc.special.jn(s*N[m],10*np.sin(theta)*rho[m])*np.cos(s*N[m]*phi)
+    return aux
+
+F1=np.abs(F(c,0,n))
+F1=F1/max(F1)
+
+for i in range(len(F1)):
+    F1[i]=20*math.log10(F1[i])
+
+#Esta interesa (novo) 
+
+pl.figure(10) 
+pl.plot(c,F1,label=u'---')
+pl.legend(loc='upper right')
+#pl.savefig('---.png',dpi=300)'''
+
 
 '''
 x=np.arange(-10,10,0.1); x=np.delete(x,np.where(x==0))
@@ -248,18 +287,17 @@ for i in range(nf):
 
 #Representación 3D
         
-fig = pl.figure(10)
+fig = pl.figure(12)
 ax = pl.axes(projection='3d')
 ax.plot_surface(X, Y, Z, cmap='viridis')
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 ax.grid(False)
-
+ax.set_visible(True)
 ax.set_zlim(-50,0)
-#pl.savefig('3D.png',dpi=500)
+pl.savefig('3D_2.png',dpi=500)
 #ax.view_init(0, 0)'''
-
 
 
 print 'Tempo de execución:',time.clock()-t0,'(s)'
