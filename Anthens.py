@@ -119,7 +119,7 @@ for i in range(M):
         rho[i]=d*(i+0.5)
         beta[i,j]=(2*j+1)*np.pi/N[i]
 
-I=g0(rho*np.pi/5,n)
+I=np.absolute(g0(rho*np.pi/5,n))
 
 def F(theta,phi,n): #Páxina 253
     aux=0
@@ -138,7 +138,7 @@ for i in range(len(F1)):
 '''
 pl.figure(4) #Páxina 254
 pl.plot(c,F1,label=u'-')
-pl.xlabel('Páxina 254')
+pl.xlabel('Paxina 254')
 pl.legend(loc='upper right')
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
@@ -231,29 +231,29 @@ pl.xlim(0,np.pi)
 
 #Expansión 6.99 -------------------------------------------------------------
 
-k=4; infty=90
-N=np.arange(1,10,1)*k
-d=0.5 #Distancia uniforme entre círculos
-M=len(N); ka=10
-rho=np.zeros(M); beta=np.zeros([M,ka])
+l=1; infty=90
+N=np.arange(1,11,1)*4*l
+d=0.5 #Distancia uniforme entre círculos: d=0.5*lambda=1/5*a
+M=len(N)
+rho=np.zeros(M)
         
 for i in range(M):
-    for j in range(ka):
-        rho[i]=d*(i+0.5)
-        beta[i,j]=(2*j+1)*np.pi/N[i]
+    rho[i]=d*(i+0.5)
 
-I=g0(rho*np.pi/5,n)
+I=g0(rho*np.pi/5,n) #I=g0(rho*np.pi/a,n) a=5/2*lambda
+I2=np.pi*5*I/(10*l)
 
-def F(theta,phi,n): #Páxina 253
-    aux=0
+def Fcomplex(u,phi,n): #Páxina 259
+    aux1=0
     for m in range(M):
-        aux+=N[m]*I[m]*f0(10*np.sin(theta)*rho[m])
+        aux1+=N[m]*I2[m]*sc.special.j0(u*rho[m]*np.pi/5)
+    aux2=0
     for m in range(M):
-        for s in range(infty):
-            aux+=2*(-1)**s*N[m]*I[m]*sc.special.jn(s*N[m],10*np.sin(theta)*rho[m])*np.cos(s*N[m]*phi)
-    return aux
+        for s in np.arange(1,infty,1):
+            aux2+=2*(-1)**s*N[m]*I2[m]*sc.special.jn(s*N[m],u*rho[m]*np.pi/5)*np.cos(s*N[m]*phi)
+    return aux1+aux2
 
-F1=np.abs(F(c,0,n))
+F1=np.absolute(Fcomplex(c,0,n))
 F1=F1/max(F1)
 
 for i in range(len(F1)):
@@ -263,6 +263,8 @@ for i in range(len(F1)):
 
 pl.figure(10) 
 pl.plot(c,F1,label=u'---')
+pl.xlim(0,7)
+pl.ylim(-50,0)
 pl.legend(loc='upper right')
 #pl.savefig('---.png',dpi=300)'''
 
