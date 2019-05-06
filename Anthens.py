@@ -8,7 +8,7 @@ import time as time
 
 t0=time.clock()
 #Parámetros
-s=float(-15)
+s=float(-25)
 n=6
 
 
@@ -231,47 +231,44 @@ pl.xlim(0,np.pi)
 
 #Expansión 6.99 -------------------------------------------------------------
 
-l=1; infty=90
-N=np.arange(1,11,1)*4*l
-d=0.5 #Distancia uniforme entre círculos: d=0.5*lambda=1/5*a
-M=len(N)
-rho=np.zeros(M)
+l=2; M=5 #Núemero de puntos e discos
+N=np.arange(1,M+1,1)*4*l
+#N=np.array([2,3,5,6,30])
+p=np.zeros(M); a=2.5
         
-for i in range(M):
-    rho[i]=d*(i+0.5)
+for m in np.arange(1,M+1,1):
+    p[m-1]=m*np.pi/5
 
-I=g0(rho*np.pi/5,n) #I=g0(rho*np.pi/a,n) a=5/2*lambda
-I2=np.pi*5*I/(10*l)
+I=g0(p,n)
+I2=np.absolute(np.pi*a*I/(10*l))
 
 def Fcomplex(u,phi,n): #Páxina 259
-    aux1=0
+    aux=0
     for m in range(M):
-        aux1+=N[m]*I2[m]*sc.special.j0(u*rho[m]*np.pi/5)
-    aux2=0
-    for m in range(M):
-        for s in np.arange(1,infty,1):
-            aux2+=2*(-1)**s*N[m]*I2[m]*sc.special.jn(s*N[m],u*rho[m]*np.pi/5)*np.cos(s*N[m]*phi)
-    return aux1+aux2
+        aux+=N[m]*I2[m]*sc.special.j0(u*p[m])
+        for s in np.arange(1,100,1):
+            aux+=2*(-1)**s*N[m]*I2[m]*sc.special.jn(s*N[m],u*p[m])*np.cos(s*N[m]*phi)
+    return aux
 
-F1=np.absolute(Fcomplex(c,0,n))
-F1=F1/max(F1)
+F1complex=np.absolute(Fcomplex(c,0,n))
+F1complex=F1complex/max(F1complex)
 
-for i in range(len(F1)):
-    F1[i]=20*math.log10(F1[i])
+for i in range(len(F1complex)):
+    F1complex[i]=20*math.log10(F1complex[i])
 
 #Esta interesa (novo) 
 
 pl.figure(10) 
-pl.plot(c,F1,label=u'---')
+pl.plot(c,F1complex,label=u'-')
 pl.xlim(0,7)
 pl.ylim(-50,0)
 pl.legend(loc='upper right')
 #pl.savefig('---.png',dpi=300)'''
 
 
-'''
-x=np.arange(-10,10,0.1); x=np.delete(x,np.where(x==0))
-y=np.arange(-10,10,0.1); y=np.delete(x,np.where(x==0))
+
+x=np.arange(-10,10,0.01); x=np.delete(x,np.where(x==0))
+y=np.arange(-10,10,0.01); y=np.delete(x,np.where(x==0))
 X,Y=np.meshgrid(x,y)
         
 phi=np.abs(np.arctan(X/Y))
