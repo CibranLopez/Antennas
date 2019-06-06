@@ -1,0 +1,95 @@
+\documentclass[a4paper,12pt]{article} \usepackage[spanish]{babel} 	\usepackage[latin1]{inputenc} \usepackage{anysize} \usepackage{float} \usepackage{subfigure} \usepackage[linkcolor=blue, colorlinks]{hyperref} \usepackage{fancyhdr} \usepackage{amsmath} \usepackage{amsfonts} \usepackage{graphicx}
+\pagestyle{fancy} \rfoot{---} \rhead{Cibrán López Álvarez} \renewcommand{\footrulewidth}{1pt} \renewcommand{\headrulewidth}{1pt} 
+\parindent=2mm \parskip=2mm \marginsize{2cm}{2cm}{1.5cm}{1.5cm} \usepackage{array} \usepackage[T1]{fontenc}
+\begin{document}
+\author{López Álvarez, Cibrán} \title{\Huge{Antenas: \\ \vspace{0.3cm} ---}} \maketitle 
+\newpage  \tableofcontents \newpage
+
+\section{Introducción teórica}
+
+
+\section{Obxectivos}
+
+Partindo da descomposición polar do potencial vector en cilíndricas, obteremos a expresión do campo e, mediante unha aproximación por Taylor, intentaremos modificar o patrón de radiación da antena.
+
+\section{Desenvolvemento}
+
+O potencial vector se pode descompoñer en:
+
+\begin{equation} \vec{a}(\theta,\phi)=\int_{S} \vec{K}(x,y)e^{jk\varsigma}dxdy \end{equation} 
+\begin{equation} \vec{F}(\theta,\phi)=\int_{S} \vec{K_m}(x,y)e^{jk\varsigma}dxdy \label{F1} \end{equation} 
+
+Onde definimos: $\varsigma=x sin(\theta)cos(\phi)+ y sin(\theta)sin(\phi)$. A continuación facemos unha descomposición en factores: (PARA QUE?)
+
+\begin{equation} \vec{a_{\theta}}(\theta,\phi)=cos(\theta)sin(\phi)\int_{S} \vec{K_y}(x,y)e^{jk\varsigma}dxdy \end{equation} 
+\begin{equation} \vec{a_{\phi}}(\theta,\phi)=cos(\phi)\int_{S} \vec{K_y}(x,y)e^{jk\varsigma}dxdy \end{equation} 
+
+Onde definimos: $\varsigma=x sin(\theta)cos(\phi)+ y sin(\theta)sin(\phi)$.
+
+Pasamos a ecuación \ref{F1} a cilíndricas ($x=\rho cos(\beta); y=\rho sin(\beta)$) :
+
+\begin{equation} \vec{F}(\theta,\phi)=\int_{0}^{a} \int_{0}^{2\pi} \vec{K}(\rho,\beta)e^{jk\rho sin(\theta) cos(\phi-\theta)} \rho d\rho d\beta \label{F2} \end{equation} 
+
+Onde aplicamos: $x sin(\theta)cos(\phi)+ y sin(\theta)sin(\phi)=\rho sin(\theta)(cos(\beta)cos(\phi)+sin(\beta)sin(\phi)$.
+
+\section{Distribución uniforme}
+
+Supoñamos unha distribución simétrica de carga na abertura respecto a $\beta$, de xeito que podemos facer un desenvolvemento en series de Fourier desta distribución:
+
+\begin{equation} \vec{K}(\rho,\beta)=\sum_{n=-\infty}^{\infty}  \vec{K_n}(\rho) e^{jn\beta)} \label{1} \end{equation} 
+
+Esta expoñencial pode ser deselvolta á súa vez en funcións  de Bessel aplicando a seguinte indentidade:
+
+\begin{equation} e^{j (u sin(pt)+v sin(qt))}=\sum_{n=-\infty}^{\infty} J_n^{p,q}(u,v) e^{jnt} \label{Bessel} \end{equation} 
+
+Tomando: $u=0, v=k \rho sin(\theta), q=p=1, t=\phi-\beta+\frac{\pi}{2}$ obtemos:
+
+\begin{equation} e^{j k \rho sin(\theta) sin(\phi - \beta +\frac{\pi}{2})} =e^{jk \rho sin(\theta) cos(\phi - \beta)}=\sum_{n=-\infty}^{\infty} J_n(k\rho sin(\theta)e^{jn(\phi-\beta)}e^{jn\frac{\pi}{2}} =\sum_{n=-\infty}^{\infty}J_n(k\rho sin(\theta))j^ne^{jn(\phi-\beta)}  \label{Bessel} \end{equation} 
+
+
+Sustituindo \ref{F2} obtemos:
+
+\begin{equation} \begin{split} \vec{F}(\theta,\phi)=\sum_{n=-\infty}^{\infty} \sum_{m=-\infty}^{\infty} \int_{0}^{a} \int_{0}^{2\pi} j^m\vec{K_n}(\rho)J_m(k\rho sin(\theta))e^{jm\phi} e^{j\beta(n-m)} \rho d\rho d\beta \\
+=\sum_{n=-\infty}^{\infty} \sum_{m=-\infty}^{\infty} \int_{0}^{a} j^m\vec{K_n}(\rho)J_m(k\rho sin(\theta))e^{jm\phi} \rho d\rho \int_{0}^{2\pi} e^{j\beta(n-m)}  d\beta \end{split} \end{equation} 
+
+Atendemos a esta última integral en $\beta$:
+
+\begin{itemize}
+	\item $\int_{0}^{2\pi} e^{j\beta(n-m)} d\beta =0 \hspace{0.5cm} \forall n \ne m$.
+	\item $\int_{0}^{2\pi} e^{j\beta(n-m)} d\beta =2\pi \hspace{0.5cm} \forall n=m$.
+\end{itemize}
+
+
+Tendo esto en conta:
+
+\begin{equation} \vec{F}(\theta,\phi)=2\pi \sum_{n=-\infty}^{\infty} \int_{0}^{a} j^n\vec{K_n}(\rho)J_n(k\rho sin(\theta))e^{jn\phi} \rho d\rho =\footnote{Esiximos independencia en $\phi$, o que implica n=0} 2\pi \int_{0}^{a} \vec{K_0}(\rho)J_0(\rho sin(\theta)) \rho d\rho = \end{equation} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%---------------------------------------------------------------------------------------------------------------------
+
+%---------------------------------------------------------------------------------------------------------------------
+\newpage
+\vspace{1cm}
+\begin{thebibliography}{n}
+  \bibitem{Libro1} R.S. Elliott, G.J. Stern; {\it Shaped patterns from a continuous planar aperture distribution}.
+  \bibitem{Libro2} R.S. Elliott; {\it Antenna theory and design}.
+\end{thebibliography}
+
+\end{document}
