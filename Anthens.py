@@ -127,7 +127,6 @@ def F(theta,phi,n): #Páxina 253
 F1=np.abs(F(c,0,n))
 F1=20*np.log10(F1/max(F1))
 
-#Esta interesa 
 '''
 pl.figure(4) #Páxina 254
 pl.plot(c,F1,label=u'-')
@@ -150,7 +149,7 @@ caso2=np.abs(G1(c,n)); caso2=caso2/max(caso2)
 
 
 #Caso 3 ---------------------------------------------------------------------
-    
+
 u=[0, 0.5967, 1.7837, 3.6420, 4.3039, 5.2129]
 v=[0, 0.5225, 0.5268, 0, 0, 0]
 
@@ -197,7 +196,7 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,20)
 pl.xlabel('Segundo caso')
-pl.savefig('Caso2.png',dpi=300)'''
+pl.savefig('Caso2.png',dpi=300)
 
 pl.figure(7) #Terceiro caso
 pl.plot(c,caso3,label=u'n=%i'%n)
@@ -226,33 +225,35 @@ uc=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129
 distrbn=g0(c,n)
 
 
-l=2; M=20 #Núemero de puntos e discos
+l=1; M=20 #Núemero de puntos e discos
 N=np.arange(1,M+1,1)*4*l
-#N=np.array([30,4,16,12,4])
 p=np.zeros(M); a=5
-        
+
+
 for m in np.arange(1,M+1,1):
-    p[m-1]=0.5*m*np.pi/a
+    p[m-1]==0.5*m*np.pi/a
+
 
 I=g0(p,n) #Complex
 I2=np.pi*a*I/(10*l) #Complex
-#I2=[1+1j*np.pi, 0.961+1j*179*2*np.pi/360, 0.851+1j*176*2*np.pi/360,0.689+1j**2*np.pi/360, 0.51+1j**2*np.pi/360,0.377+1j*128*2*np.pi/360,0.36+1j*92*2*np.pi/360,0.429+1j*66*2*np.pi/360,0.497+1j*51*2*np.pi/360,0.521+1j*41*2*np.pi/360,0.494+1j*32*2*np.pi/360,0.427+1j*22*2*np.pi/360,0.340+1j*10*2*np.pi/360,0.257-1j*7*2*np.pi/360,0.199-1j*31*2*np.pi/360,0.178-1j*59*2*np.pi/360,0.181-1j*82*2*np.pi/360,0.191-1j*98*2*np.pi/360,0.1-1j*108*2*np.pi/360,0.204-1j*114*2*np.pi/360,0.205-1j*115*2*np.pi/360]
+
 
 def Fcomplex(uc,phi,n): #Páxina 259
     aux=0+1j*0
     for m in range(M):
         aux+=N[m]*I2[m]*sc.special.j0(uc*p[m])
-        for s in np.arange(1,200,1):
-           aux+=2*(-1)**s*N[m]*I2[m]*sc.special.jn(s*N[m],uc*p[m])*np.cos(s*N[m]*phi)
+        for s in np.arange(1,100,1):
+            aux+=2*(-1)**s*N[m]*I2[m]*sc.special.jn(s*N[m],uc*p[m])*np.cos(s*N[m]*phi)
     return aux
 
-F1complex=np.absolute(Fcomplex(c,0,n))
+
+F1complex=np.absolute(Fcomplex(c,np.pi/2,n))
 
 F1complex=20*np.log10(F1complex/np.max(F1complex))
 
 
 pl.figure(10) 
-pl.plot(c,F1complex,label=u'-')
+pl.plot(c,F1complex,label=u'Fcomplex')
 pl.xlim(0,7)
 pl.ylim(-50,0)
 pl.legend(loc='upper right')
@@ -290,7 +291,7 @@ ax.set_zlabel('Z')
 ax.grid(False)
 ax.set_visible(True)
 ax.set_zlim(-50,0)
-#pl.savefig('Proba.png',dpi=500)
+pl.savefig('Proba3.png',dpi=500)
 #ax.view_init(0, 0)'''
 
 
