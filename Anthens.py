@@ -2,7 +2,6 @@
 import numpy as np
 import matplotlib.pyplot as pl
 import scipy as sc
-import math as math
 from mpl_toolkits.mplot3d import Axes3D
 import time as time
 
@@ -51,12 +50,9 @@ def G1(x,n):
 
 F=np.abs(G1(c,n))
 F0=np.abs(G1(c,0))
-F=F/max(F)
-F0=F0/max(F0)
 
-for i in range(len(F)):
-    F[i]=20*math.log10(F[i])
-    F0[i]=20*math.log10(F0[i])
+F=20*np.log10(F/max(F))
+F0=20*np.log10(F0/max(F0))
     
 '''
 pl.figure(1)
@@ -90,7 +86,7 @@ def g0(x,n): #Aplicado L'Hôpital
     aux=0+1j*0
     for i in range(n):
         aux+=((G2(i,n)*f0(x*zeros[i]))/(f0(np.pi*zeros[i])**2))
-    return 4*aux/(np.pi**2)
+    return 2*aux/(np.pi**2) #Cambiei un 4 por un 2
 
 g=np.abs(g0(c,n))
 g=g/max(g)
@@ -129,10 +125,7 @@ def F(theta,phi,n): #Páxina 253
     return 4*aux
 
 F1=np.abs(F(c,0,n))
-F1=F1/max(F1)
-
-for i in range(len(F1)):
-    F1[i]=20*math.log10(F1[i])
+F1=20*np.log10(F1/max(F1))
 
 #Esta interesa 
 '''
@@ -184,11 +177,9 @@ phi=np.angle(distrbn)
 distrbn=np.absolute(distrbn)
 distrbn=distrbn/np.max(distrbn)
 
-
-for i in range(len(caso3)):
-    caso1[i]=20*math.log10(caso1[i])
-    caso2[i]=20*math.log10(caso2[i])
-    caso3[i]=10*math.log10(caso3[i])
+caso1=20*np.log10(caso1)
+caso2=20*np.log10(caso2)
+caso3=10*np.log10(caso3)
 
 #Estas catro interesan
 '''
@@ -206,7 +197,7 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,20)
 pl.xlabel('Segundo caso')
-pl.savefig('Caso2.png',dpi=300)
+pl.savefig('Caso2.png',dpi=300)'''
 
 pl.figure(7) #Terceiro caso
 pl.plot(c,caso3,label=u'n=%i'%n)
@@ -229,34 +220,36 @@ pl.xlim(0,np.pi)
 #pl.savefig('Fase.png',dpi=300)'''
 
 
-#Expansión 6.99 -------------------------------------------------------------
+#Expansión 6.99 c
 
-l=2; M=5 #Núemero de puntos e discos
+uc=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129+1j*0]
+distrbn=g0(c,n)
+
+
+l=2; M=20 #Núemero de puntos e discos
 N=np.arange(1,M+1,1)*4*l
-#N=np.array([2,3,5,6,30])
-p=np.zeros(M); a=2.5
+#N=np.array([30,4,16,12,4])
+p=np.zeros(M); a=5
         
 for m in np.arange(1,M+1,1):
-    p[m-1]=m*np.pi/5
+    p[m-1]=0.5*m*np.pi/a
 
-I=g0(p,n)
-I2=np.absolute(np.pi*a*I/(10*l))
+I=g0(p,n) #Complex
+I2=np.pi*a*I/(10*l) #Complex
+#I2=[1+1j*np.pi, 0.961+1j*179*2*np.pi/360, 0.851+1j*176*2*np.pi/360,0.689+1j**2*np.pi/360, 0.51+1j**2*np.pi/360,0.377+1j*128*2*np.pi/360,0.36+1j*92*2*np.pi/360,0.429+1j*66*2*np.pi/360,0.497+1j*51*2*np.pi/360,0.521+1j*41*2*np.pi/360,0.494+1j*32*2*np.pi/360,0.427+1j*22*2*np.pi/360,0.340+1j*10*2*np.pi/360,0.257-1j*7*2*np.pi/360,0.199-1j*31*2*np.pi/360,0.178-1j*59*2*np.pi/360,0.181-1j*82*2*np.pi/360,0.191-1j*98*2*np.pi/360,0.1-1j*108*2*np.pi/360,0.204-1j*114*2*np.pi/360,0.205-1j*115*2*np.pi/360]
 
-def Fcomplex(u,phi,n): #Páxina 259
-    aux=0
+def Fcomplex(uc,phi,n): #Páxina 259
+    aux=0+1j*0
     for m in range(M):
-        aux+=N[m]*I2[m]*sc.special.j0(u*p[m])
-        for s in np.arange(1,100,1):
-            aux+=2*(-1)**s*N[m]*I2[m]*sc.special.jn(s*N[m],u*p[m])*np.cos(s*N[m]*phi)
+        aux+=N[m]*I2[m]*sc.special.j0(uc*p[m])
+        for s in np.arange(1,200,1):
+           aux+=2*(-1)**s*N[m]*I2[m]*sc.special.jn(s*N[m],uc*p[m])*np.cos(s*N[m]*phi)
     return aux
 
 F1complex=np.absolute(Fcomplex(c,0,n))
-F1complex=F1complex/max(F1complex)
 
-for i in range(len(F1complex)):
-    F1complex[i]=20*math.log10(F1complex[i])
+F1complex=20*np.log10(F1complex/np.max(F1complex))
 
-#Esta interesa (novo) 
 
 pl.figure(10) 
 pl.plot(c,F1complex,label=u'-')
@@ -265,8 +258,43 @@ pl.ylim(-50,0)
 pl.legend(loc='upper right')
 #pl.savefig('---.png',dpi=300)'''
 
+#Paso a 3D ------------------------------------------------------------------
+'''
+x=np.arange(-7,7,0.1); x=np.delete(x,np.where(x==0))
+X,Y=np.meshgrid(x,x)
+
+phi=np.zeros(np.shape(X))
+r=np.sqrt(X**2+Y**2)
+nf,nc=np.shape(X)
 
 
+for i in range(nf):
+    for j in range(nc):
+        if X[i,j]<0:
+            phi[i,j]=np.pi-np.abs(np.arctan(Y[i,j]/X[i,j]))
+        else:
+            phi[i,j]=np.abs(np.arctan(Y[i,j]/X[i,j]))
+        
+Z=np.absolute(Fcomplex(r,phi,n))
+Z=20*np.log10(Z/np.max(Z))
+
+fig = pl.figure(11)
+pl.imshow(Z)
+
+fig = pl.figure(12)
+ax = pl.axes(projection='3d')
+ax.plot_surface(X, Y, Z, cmap='viridis')
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.grid(False)
+ax.set_visible(True)
+ax.set_zlim(-50,0)
+#pl.savefig('Proba.png',dpi=500)
+#ax.view_init(0, 0)'''
+
+
+'''
 x=np.arange(-10,10,0.01); x=np.delete(x,np.where(x==0))
 y=np.arange(-10,10,0.01); y=np.delete(x,np.where(x==0))
 X,Y=np.meshgrid(x,y)
@@ -275,17 +303,12 @@ phi=np.abs(np.arctan(X/Y))
 r=np.sqrt(X**2+Y**2)
 
 Z=np.abs(Fim(r,n)) #Libro
-Z=Z/np.max(Z)
-nf,nc=np.shape(Z)
 
-for i in range(nf):
-    for j in range(nc):
-        Z[i,j]=10*math.log10(Z[i,j])
+Z=10*np.log10(Z/np.max(Z))
         
-
 
 #Representación 3D
-        
+
 fig = pl.figure(12)
 ax = pl.axes(projection='3d')
 ax.plot_surface(X, Y, Z, cmap='viridis')
