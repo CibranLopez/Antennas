@@ -7,7 +7,7 @@ import time as time
 
 t0=time.clock()
 #Parámetros
-s=float(-25)
+s=float(-15)
 n=6
 
 
@@ -60,7 +60,7 @@ pl.plot(c,F0,label=u'n=0')
 pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,20)
-#pl.savefig('Anthens1.png',dpi=300)
+#pl.savefig('Anthens1.png',dpi=300)'''
 
 pl.figure(2)
 pl.plot(c,F,label=u'n=%i'%n)
@@ -91,7 +91,7 @@ def g0(x,n): #Aplicado L'Hôpital
 g=np.abs(g0(c,n))
 g=g/max(g)
 
-'''
+
 pl.figure(3)
 pl.plot(c,g,label=u'Abertura 1')
 pl.legend(loc='upper left')
@@ -225,7 +225,7 @@ uc=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129
 distrbn=g0(c,n)
 
 
-l=1; M=20 #Núemero de puntos e discos
+l=1; M=10 #Núemero de puntos e discos
 N=np.arange(1,M+1,1)*4*l
 p=np.zeros(M); a=5
 
@@ -247,11 +247,11 @@ def Fcomplex(uc,phi,n): #Páxina 259
     return aux
 
 
-F1complex=np.absolute(Fcomplex(c,np.pi/2,n))
+F1complex=np.absolute(Fcomplex(c,0,n))
 
 F1complex=20*np.log10(F1complex/np.max(F1complex))
 
-
+'''
 pl.figure(10) 
 pl.plot(c,F1complex,label=u'Fcomplex')
 pl.xlim(0,7)
