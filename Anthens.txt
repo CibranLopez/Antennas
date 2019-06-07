@@ -6,7 +6,9 @@
 \newpage  \tableofcontents \newpage
 
 \section{Introducción teórica}
-
+as corentr levan dirección y.
+partimos de páxina 31
+114, 115, 116
 
 \section{Obxectivos}
 
@@ -14,45 +16,59 @@ Partindo da descomposición polar do potencial vector en cilíndricas, obteremos
 
 \section{Desenvolvemento}
 
-O potencial vector se pode descompoñer en:
+Para puntos lonxanos, podemos poñer o vector potencial como o produto do factor de onda esférica saínte polas funcións de ponderación direccional que, no caso de considerar unicamente correntes libres, toma a seguinte forma:
 
 \begin{equation} \vec{a}(\theta,\phi)=\int_{S} \vec{K}(x,y)e^{jk\varsigma}dxdy \end{equation} 
-\begin{equation} \vec{F}(\theta,\phi)=\int_{S} \vec{K_m}(x,y)e^{jk\varsigma}dxdy \label{F1} \end{equation} 
 
-Onde definimos: $\varsigma=x sin(\theta)cos(\phi)+ y sin(\theta)sin(\phi)$. A continuación facemos unha descomposición en factores: (PARA QUE?)
+Onde definimos: $\varsigma=x sin(\theta)cos(\phi)+ y sin(\theta)sin(\phi)$. 
+
+Levamos a cabo unha expansión, obtendo as compoñentes transversais do potencial vector: 
+
+\begin{equation} \vec{a_{\theta}}(\theta,\phi)=\int_{S} (cos(\theta)cos(\phi) \vec{K_x}(x,y,z)+cos(\theta)sin(\phi) \vec{K_y}(x,y,z)-sin(\theta) \vec{K_z}(x,y))e^{jk\varsigma}ds \end{equation} 
+
+\begin{equation} \vec{a_{\phi}}(\theta,\phi)=\int_{S}  (-sin(\phi) \vec{K_x}(x,y,z)+cos(\phi) \vec{K_y}(x,y,z))e^{jk\varsigma}ds \end{equation}
+
+Aplicamos como condición que só haxa corrente en dirrección $\hat{y}$, simplificamos as expresións anteriores:
 
 \begin{equation} \vec{a_{\theta}}(\theta,\phi)=cos(\theta)sin(\phi)\int_{S} \vec{K_y}(x,y)e^{jk\varsigma}dxdy \end{equation} 
 \begin{equation} \vec{a_{\phi}}(\theta,\phi)=cos(\phi)\int_{S} \vec{K_y}(x,y)e^{jk\varsigma}dxdy \end{equation} 
 
-Onde definimos: $\varsigma=x sin(\theta)cos(\phi)+ y sin(\theta)sin(\phi)$.
+%FIGURAS 6.19-6.23
 
-Pasamos a ecuación \ref{F1} a cilíndricas ($x=\rho cos(\beta); y=\rho sin(\beta)$) :
+Denominamos como factor de agrupamento á parte común a ambas expresións (o integrando) e elemento radiante ó resto.
 
-\begin{equation} \vec{F}(\theta,\phi)=\int_{0}^{a} \int_{0}^{2\pi} \vec{K}(\rho,\beta)e^{jk\rho sin(\theta) cos(\phi-\theta)} \rho d\rho d\beta \label{F2} \end{equation} 
+\begin{figure}[h!] \centering \includegraphics[width=0.6\linewidth]{Coordenadas} \caption{Diagrama de coordenadas} \end{figure}
+
+Pasamos a o factor de agrupamento a polares planas ($x=\rho cos(\beta); y=\rho sin(\beta)$) :
+
+\begin{equation} \vec{F}(\theta,\phi)=\int_{0}^{a} \int_{0}^{2\pi} \vec{K}(\rho,\beta)e^{jk\rho sin(\theta) cos(\phi-\theta)} \rho d\rho d\beta \label{FncF} \end{equation} 
 
 Onde aplicamos: $x sin(\theta)cos(\phi)+ y sin(\theta)sin(\phi)=\rho sin(\theta)(cos(\beta)cos(\phi)+sin(\beta)sin(\phi)$.
 
-\section{Distribución uniforme}
+
+
+
+\section{Distribucións circulares de Taylor}
 
 Supoñamos unha distribución simétrica de carga na abertura respecto a $\beta$, de xeito que podemos facer un desenvolvemento en series de Fourier desta distribución:
 
-\begin{equation} \vec{K}(\rho,\beta)=\sum_{n=-\infty}^{\infty}  \vec{K_n}(\rho) e^{jn\beta)} \label{1} \end{equation} 
+\begin{equation} \vec{K}(\rho,\beta)=\sum_{n=-\infty}^{\infty}  \vec{K_n}(\rho) e^{jn\beta} \label{1} \end{equation} 
 
 Esta expoñencial pode ser deselvolta á súa vez en funcións  de Bessel aplicando a seguinte indentidade:
 
 \begin{equation} e^{j (u sin(pt)+v sin(qt))}=\sum_{n=-\infty}^{\infty} J_n^{p,q}(u,v) e^{jnt} \label{Bessel} \end{equation} 
 
-Tomando: $u=0, v=k \rho sin(\theta), q=p=1, t=\phi-\beta+\frac{\pi}{2}$ obtemos:
+Facemos as seguintes identificacións co noso caso: $u=0, v=k \rho sin(\theta), q=p=1, t=\phi-\beta+\frac{\pi}{2}$. Obtemos:
 
 \begin{equation} e^{j k \rho sin(\theta) sin(\phi - \beta +\frac{\pi}{2})} =e^{jk \rho sin(\theta) cos(\phi - \beta)}=\sum_{n=-\infty}^{\infty} J_n(k\rho sin(\theta)e^{jn(\phi-\beta)}e^{jn\frac{\pi}{2}} =\sum_{n=-\infty}^{\infty}J_n(k\rho sin(\theta))j^ne^{jn(\phi-\beta)}  \label{Bessel} \end{equation} 
 
 
-Sustituindo \ref{F2} obtemos:
+Sustituindo \ref{Bessel} en \ref{FncF} obtemos:
 
 \begin{equation} \begin{split} \vec{F}(\theta,\phi)=\sum_{n=-\infty}^{\infty} \sum_{m=-\infty}^{\infty} \int_{0}^{a} \int_{0}^{2\pi} j^m\vec{K_n}(\rho)J_m(k\rho sin(\theta))e^{jm\phi} e^{j\beta(n-m)} \rho d\rho d\beta \\
 =\sum_{n=-\infty}^{\infty} \sum_{m=-\infty}^{\infty} \int_{0}^{a} j^m\vec{K_n}(\rho)J_m(k\rho sin(\theta))e^{jm\phi} \rho d\rho \int_{0}^{2\pi} e^{j\beta(n-m)}  d\beta \end{split} \end{equation} 
 
-Atendemos a esta última integral en $\beta$:
+Resolvemos esta última integral en $\beta$:
 
 \begin{itemize}
 	\item $\int_{0}^{2\pi} e^{j\beta(n-m)} d\beta =0 \hspace{0.5cm} \forall n \ne m$.
@@ -60,15 +76,40 @@ Atendemos a esta última integral en $\beta$:
 \end{itemize}
 
 
-Tendo esto en conta:
+Tendo esto en conta esiximos ademais independencia en $\phi$, o que implica n=0 (este é o único valor que nos elimina a dependecia):
 
-\begin{equation} \vec{F}(\theta,\phi)=2\pi \sum_{n=-\infty}^{\infty} \int_{0}^{a} j^n\vec{K_n}(\rho)J_n(k\rho sin(\theta))e^{jn\phi} \rho d\rho =\footnote{Esiximos independencia en $\phi$, o que implica n=0} 2\pi \int_{0}^{a} \vec{K_0}(\rho)J_0(\rho sin(\theta)) \rho d\rho = \end{equation} 
+\begin{equation} \vec{F}(\theta,\phi)= 2\pi \int_{0}^{a} \vec{K_0}(\rho)J_0(\rho sin(\theta)) \rho d\rho \end{equation} 
+
+Definimos a función distribución de abertura como: $g_0(p)=\frac{2a^2K_0(\rho)}{\pi}$, e as seguintes varaibles: $u=\frac{2a sin(\theta)}{\pi}$, que indica dirección, e $p=\frac{\pi \rho}{a}$, que indica apertura radial.
+
+\begin{equation} F(u)= \int_{0}^{\pi} p g_0(p) J_0(u p) dp \end{equation} 
 
 
+\subsection{Exemplo}
+
+Consideremos unha apertura circular uniforme  $g_0(p)=1$. Retomamos a ecuación anterior e sustituímos a función de Bessel e a distribución de apertura, e resolveremos a integral:
+
+\begin{equation} \begin{split} F(u)= \sum_{k=0}^{\infty} \int_{0}^{\pi} \frac{(-1)^kp(\frac{u p}{2})^{2k}}{k! k!} dp=\sum_{k=0}^{\infty} \frac{u^{2k}(-1)^{k}}{k! k! 2^{2k}} \int_{0}^{\pi} p^{2k+1} dp= \\
+=\sum_{k=0}^{\infty} \frac{u^{2k}(-1)^{k}}{k! k! 2^{2k}} \frac{p^{2k+2}}{2k+2} \bigg\rvert_{0}^{\pi}=\sum_{k=0}^{\infty} \frac{u^{2k}(-1)^k\pi^{2k+2}}{k! k! 2^{2k} (2k+2)}=\frac{\pi J_1(\pi u)}{u} \end{split} \end{equation} 
+
+A partir de esto definimos: $\delta = \frac{J_1(\pi u)}{\pi u}$. Levamos a cabo unha representación deste patrón de radiación, obtendo a seguinte figura, onde vemos un lóbulo principal rodeado de aneis de intensidade decrecente. Cabe destacar que este é un patrón $\phi$-simétrico. 
+
+\begin{figure}[h!] \centering \includegraphics[width=0.8\linewidth]{Exemplo} \caption{Apertura uniforme} \end{figure}
 
 
+\subsection{Desplazamento de raíces}
 
+Interésanos que os lóbulos que vimos antes están máis separados, polo que modificaremos a raíz n-ésima da función $\delta$. Para eso, calculamos os ceros da función de Besel $J_1(\pi u)$, que coñeceremos como $\gamma_i$. Levamos a cabo a modificación mediante a seguinte identidade (onde $u_i$ son as novas raíces):
 
+\begin{equation} u_i=\gamma_n \frac{A^2+(i-\frac{1}{2})^2}{A^2+(n-\frac{1}{2})^2} \end{equation} 
+
+Unha vez calculado o conxunto de novas raíces, modificaremos finalmente $\delta$ mediante:
+
+\begin{equation} \delta(u)=\frac{J_1(\pi u)}{\pi u} \frac{\prod_{i=1}^{n-1} (1-\frac{u^2}{u_i^2})}{\prod_{i=1}^{n-1} (1-\frac{u^2}{\gamma_i^2})} \end{equation} 
+
+Redefinimos a apertura como: 
+
+\begin{equation} g_0(p)=\sum_{i=0}^{\infty} B_i J_0(\gamma_ip)=\frac{2}{\pi^2} \sum_{i=0}^{n-1} \frac{\delta(\gamma_i)}{J_0^2(\gamma_i \pi)} J_0(\gamma_ip) \end{equation} 
 
 
 
@@ -86,6 +127,7 @@ Tendo esto en conta:
 
 %---------------------------------------------------------------------------------------------------------------------
 \newpage
+
 \vspace{1cm}
 \begin{thebibliography}{n}
   \bibitem{Libro1} R.S. Elliott, G.J. Stern; {\it Shaped patterns from a continuous planar aperture distribution}.
