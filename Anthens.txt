@@ -12,7 +12,7 @@ partimos de páxina 31
 
 \section{Obxectivos}
 
-Partindo da descomposición polar do potencial vector en cilíndricas, obteremos a expresión do campo e, mediante unha aproximación por Taylor, intentaremos modificar o patrón de radiación da antena.
+Mediante a modificación dos elementos radiantes dunha antena e da súa función de distribución, obteremos patróns de radiación diferentes e máis afíns ó buscado, medindo a súa calidade mediante a ---.
 
 \section{Desenvolvemento}
 
@@ -85,7 +85,7 @@ Definimos a función distribución de abertura como: $g_0(p)=\frac{2a^2K_0(\rho)
 \begin{equation} F(u)= \int_{0}^{\pi} p g_0(p) J_0(u p) dp \end{equation} 
 
 
-\subsection{Exemplo}
+\subsubsection{Exemplo}
 
 Consideremos unha apertura circular uniforme  $g_0(p)=1$. Retomamos a ecuación anterior e sustituímos a función de Bessel e a distribución de apertura, e resolveremos a integral:
 
@@ -105,12 +105,86 @@ Interésanos que os lóbulos que vimos antes están máis separados, polo que mo
 
 Unha vez calculado o conxunto de novas raíces, modificaremos finalmente $\delta$ mediante:
 
-\begin{equation} \delta(u)=\frac{J_1(\pi u)}{\pi u} \frac{\prod_{i=1}^{n-1} (1-\frac{u^2}{u_i^2})}{\prod_{i=1}^{n-1} (1-\frac{u^2}{\gamma_i^2})} \end{equation} 
+\begin{equation} \delta(u)=\frac{J_1(\pi u)}{\pi u} \frac{\prod_{i=1}^{n-1} (1-\frac{u^2}{u_i^2})}{\prod_{i=1}^{n-1} (1-\frac{u^2}{\gamma_i^2})} \label{delta} \end{equation} 
 
-Redefinimos a apertura como: 
+Ademais, redefinimos a distribución de apertura, onde o sumatorio se trunca para $i>=n$: 
 
 \begin{equation} g_0(p)=\sum_{i=0}^{\infty} B_i J_0(\gamma_ip)=\frac{2}{\pi^2} \sum_{i=0}^{n-1} \frac{\delta(\gamma_i)}{J_0^2(\gamma_i \pi)} J_0(\gamma_ip) \end{equation} 
 
+Obtendo incertidumes do tipo $\frac{0}{0}$, aplicamos L'Hôpital a $g_0(p)$, obtendo a seguinte expresión para $\delta$:
+
+\begin{itemize}
+	\item $\delta=1 \hspace{0.5cm} \forall m = 0$. 
+	\item $\delta=-J_0(\gamma_m \pi) \frac{\prod_{i=1}^{n-1} \left ( 1- \frac{\gamma_i^2 (A^2+(n-\frac{1}{2})^2)}{\gamma_n^2 (A^2+(i-\frac{1}{2})^2)} \right )}{\prod_{i=1,i \ne n}^{n-1} \left (1- \frac{\gamma_n^2}{\gamma_i^2} \right )}  \hspace{0.5cm} \forall m >0$.
+\end{itemize}
+
+Visualizaremos diferentes patróns de radiación modificando dous parámetros, A e n, que caracterizan o tamaño dos lóbulos laterais e o número dos mesmos.
+
+
+\subsubsection{Exemplo}
+
+Como mostra, representaremos o patrón de radiación para n=6 e un tamaño de lóbulos laterais de $-15$ dB. Cabe recordar que ambos diagramas son $\phi$-simétricos.
+
+\begin{figure}[h!] \centering \includegraphics[width=0.8\linewidth]{Exemplo2} \caption{Apertura circular, n=6, $-15$ dB.} \end{figure}
+
+\begin{figure}[h!] \centering \includegraphics[width=0.8\linewidth]{Exemplo3} \caption{Distribución de apertura asociada.} \end{figure}
+
+
+\subsection{Discretización}
+
+Ata agora temos a función de distribución da abertura como continua. Non obstante, imos proceder a discretizala (unha antena consiste nun número finito de elementos radiantes. Para proceder, tomaremos círculos de radio $\rho_{mn}=\frac{d}{2} \sqrt{(2m-1)^2+(2n-1)^2}$, con d a distancia entre círculos, e onde m e n serías as coordenadas cartesianas.
+
+\begin{figure}[h!] \centering \includegraphics[width=0.4\linewidth]{F1} \caption{Exemplo dos elementos radiantes nun cuadrante.} \end{figure}
+
+Por tanto, xa podemos calcular a intensidade emitida por cada cada elemento radiante como función da distribución de apertura e do radio (onde a será o radio da antena):
+
+\begin{equation} I_{mn}=g_0(p)=g_0(\frac{\pi \rho_{mn}}{a}) \end{equation}
+
+Definimos a función N como o número de puntos por círculo (tomaremos múltiplos de 4, pois asumiremos simetría en cuadrantes), e M o número de círculos (como vemos, debe verificarse $M\cdot d=a$). Mediante un desevolvemento de \ref{delta}, e aplicando simetría en cuadrantes, podemos chegar á seguinte expresión:
+
+\begin{equation} \delta(\theta,\phi)=4 \sum_{m=1}^{M} \sum_{n=1}^{N_m/4} I_m cos(k \rho_m cos(\beta_{mn}) sin(\theta) cos(\phi)) cos(k \rho_m sin(\beta_{nm}) sin(\theta) sin(\phi)) \end{equation}
+
+Onde: $\beta_{nm}=\frac{(2n-1)\pi}{N_m}$, e k é o número de onda.
+
+
+\subsubsection{Exemplo}
+
+Como visualización tomamos unha apertura circular con n=6 lóbulos modificados, e de $-15$ dB. Como vemos, interesa que sexa o máis próximo posible á figura obtida mediante a distribución continua.
+
+\begin{figure}[h!] \centering \includegraphics[width=0.8\linewidth]{Discret} \caption{Apertura circular, n=6, $-15$ dB.} \end{figure}
+
+
+\subsection{Raíces complexas}
+
+Agora atenderemos as raíces complexas da función de Bessel, estudaremos os patróns de radiación que obtemos con estas. Consideraremos as seis primeiras raíces:
+
+\begin{table}[h!] \begin{tabular}{|c|c|} \hline
+$u_n$ & $v_n$  \\ \hline
+0 & 0  \\
+0.5967 & 0.5225  \\
+1.7837 & 0.5268   \\
+3.6420 & 0   \\
+4.3039 & 0   \\
+5.2119 & 0 \\ \hline
+\end{tabular} \centering \caption{Raíces complexas} \end{table}
+
+Modificamos entón a expresión \ref{delta} multplicando polo complexo conxugado do denominador:
+
+\begin{equation} \delta(u)=\frac{J_1(\pi u)}{\pi u} \frac{\prod_{i=1}^{n-1} (1-\frac{u^2}{u_i^2})}{\prod_{i=1}^{n-1} (1-\frac{u^2}{\gamma_i^2})} \label{delta} \end{equation} 
+
+
+\subsubsection{Exemplo}
+
+Representamos este resultado para un número de lóbulos modificados n=6, e de $-15$ dB. Obtemos o seguinte:
+
+\begin{figure}[h!] \centering \includegraphics[width=0.8\linewidth]{Complex} \caption{Apertura circular, n=6, $-15$ dB.} \end{figure}
+
+A continuación representamos fase e amplitude das raíces complexas, obtendo:
+
+\begin{figure}[h!] \centering \includegraphics[width=0.8\linewidth]{Amplitude} \caption{Amplitude.} \end{figure}
+
+\begin{figure}[h!] \centering \includegraphics[width=0.8\linewidth]{Fase} \caption{Fase.} \end{figure}
+
 
 
 
@@ -125,13 +199,12 @@ Redefinimos a apertura como:
 
 %---------------------------------------------------------------------------------------------------------------------
 
-%---------------------------------------------------------------------------------------------------------------------
 \newpage
 
-\vspace{1cm}
 \begin{thebibliography}{n}
-  \bibitem{Libro1} R.S. Elliott, G.J. Stern; {\it Shaped patterns from a continuous planar aperture distribution}.
-  \bibitem{Libro2} R.S. Elliott; {\it Antenna theory and design}.
+  \bibitem{Libro1} R.S. Elliott; {\it Antenna theory and design}. 
+  \bibitem{Libro2}R.S. Elliott, G.J. Stern; {\it Shaped patterns from a continuous planar aperture distribution}.
+  \bibitem{Libro3} H. J. Korsch et al.; {\it On two-dimensional Bessel functions}
 \end{thebibliography}
 
 \end{document}
