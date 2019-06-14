@@ -60,7 +60,6 @@ pl.xlabel(r'$u=sin(\theta) 2a/\lambda$')
 pl.ylabel('dB')
 pl.ylim(-50,0)
 pl.xlim(0,20)
-#pl.savefig('---.png',dpi=300)
 
 pl.figure(2)
 pl.plot(c,F,label=u'Apertura uniforme')
@@ -68,8 +67,7 @@ pl.legend(loc='upper right')
 pl.xlabel(r'$u=sin(\theta) 2a/\lambda$')
 pl.ylabel('dB')
 pl.ylim(-50,0)
-pl.xlim(0,10)
-#pl.savefig('Exempl.png',dpi=300)'''
+pl.xlim(0,10)'''
 
 def G2(m,n):
     if m==0:
@@ -101,9 +99,7 @@ pl.xlabel(r'$u=sin(\theta) 2a/\lambda$')
 pl.xlabel(r'$p=\rho \pi /a$')
 pl.ylabel('Amplitude relativa')
 pl.xlim(0,np.pi)
-pl.ylim(0,1)
-#pl.savefig('Exempl.png',dpi=300)'''
-
+pl.ylim(0,1)'''
 
 #Páxina 254 -----------------------------------------------------------------
 
@@ -137,8 +133,7 @@ pl.xlabel(r'$\theta$')
 pl.ylabel('dB')
 pl.legend(loc='upper right')
 pl.xlim(0,np.pi/2)
-pl.ylim(-50,0)
-#pl.savefig('---.png',dpi=300)'''
+pl.ylim(-50,0)'''
 
 
 #Caso 1 ---------------------------------------------------------------------
@@ -190,7 +185,6 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,20)
 pl.xlabel('Primeiro caso')
-pl.savefig('Caso1.png',dpi=300)
 
 pl.figure(6) #Segundo caso
 pl.plot(c,caso2,label=u'n=%i'%n)
@@ -198,7 +192,6 @@ pl.legend(loc='upper right')
 pl.ylim(-50,0)
 pl.xlim(0,20)
 pl.xlabel('Segundo caso')
-pl.savefig('Caso2.png',dpi=300)
 
 pl.figure(7) #Terceiro caso
 pl.plot(c,caso3,label=u'Raíces complexas')
@@ -207,7 +200,6 @@ pl.xlabel('u')
 pl.ylabel('dB')
 pl.ylim(-50,0)
 pl.xlim(0,10)
-#pl.savefig('Com.png',dpi=300)
 
 pl.figure(8)
 pl.plot(c,distrbn,label=u'Amplitude')
@@ -215,55 +207,86 @@ pl.ylabel('Amplitude relativa')
 pl.xlabel('u')
 pl.legend(loc='upper right')
 pl.xlim(0,np.pi)
-#pl.savefig('Amplit.png',dpi=300)
 
 pl.figure(9)
 pl.plot(c,phi,label=u'Fase')
 pl.ylabel('Fase relativa')
 pl.xlabel('u')
 pl.legend(loc='upper right')
-pl.xlim(0,np.pi)
-#pl.savefig('Fae.png',dpi=300)'''
-
+pl.xlim(0,np.pi)'''
 
 #Expansión 6.99
 
 uc=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129+1j*0]
-distrbn=g0(c,n)
 
-l=1; M=10; a=5 #Núemero de puntos e discos
+l=1; M=20; a=5 #Núemero de puntos e discos
 N=np.arange(1,M+1,1)*4*l
+
 p=np.arange(1,M+1,1)*np.pi/M
 
 
-I=g0(p,n) #Complex
-I2=a*np.pi*I/(10*l) #Complex
+I=g0(p,n)
+I2=a*np.pi*I/(10*l) 
 
-def Fcomplex(u,phi,n): #Páxina 259
+def Fcomplex(theta,phi,n): #Páxina 259
     aux=0+1j*0
     for m in range(M):
-        aux+=N[m]*I2[m]*sc.special.j0(u*p[m])
-        for s in np.arange(1,100,1):
-            aux+=2*(-1)**s*N[m]*I2[m]*sc.special.jn(s*N[m],u*p[m])*np.cos(s*N[m]*phi)
+        aux+=N[m]*I2[m]*sc.special.j0(2*a*np.sin(theta)*p[m])
+        for s in np.arange(1,20,1):
+            aux+=2*(-1)**s*N[m]*I2[m]*sc.special.jn(s*N[m],2*a*np.sin(theta)*p[m])*np.cos(s*N[m]*phi)
     return aux
 
-F1complex=np.absolute(Fcomplex(c,np.pi/8,n))
+
+F1complex=np.absolute(Fcomplex(c,0,n))
 
 F1complex=20*np.log10(F1complex/np.max(F1complex))
 
-'''
+
 pl.figure(10) 
 pl.plot(c,F1complex,label=u'Fcomplex')
-pl.xlim(0,10)
+pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
 pl.legend(loc='upper right')
 #pl.savefig('---.png',dpi=300)'''
 
 
-#Paso a 3D ------------------------------------------------------------------
+#Desenvolvemento 6.99 -------------------------------------------------------
 
 '''
-x=np.arange(-10,10,0.1); x=np.delete(x,np.where(x==0))
+I=g0(p,n)
+I2=a*np.pi*I/(10*l) 
+
+k=np.arange(-20,20,1); k=np.delete(k,0)
+
+def Fcomplex(theta,phi,n): #Páxina 259
+    aux=0+1j*0
+    for m in range(M):
+        aux+=N[m]*I2[m]*sc.special.j0(2*a*np.sin(theta)*p[m])
+        for n in range(N[m]):
+            for q in np.arange(1,20,1):
+                aux+=(1j)**q*I2[m]*sc.special.jn(q,2*a*np.sin(theta)*p[m])*np.e**(1j*q*(phi-beta[m,n]))
+            for q in np.arange(-1,-20,-1):
+                aux+=(1j)**q*I2[m]*sc.special.jn(q,2*a*np.sin(theta)*p[m])*np.e**(1j*q*(phi-beta[m,n]))
+    return aux
+
+F1complex=np.absolute(Fcomplex(c,0,n))
+
+F1complex=20*np.log10(F1complex/np.max(F1complex))
+
+
+pl.figure(10) 
+pl.plot(c,F1complex,label=u'Fcomplex')
+pl.xlim(0,np.pi/2)
+pl.ylim(-50,0)
+pl.legend(loc='upper right')
+#pl.savefig('---.png',dpi=300)'''
+
+
+
+#Paso a 3D ------------------------------------------------------------------
+
+
+x=np.arange(-np.pi/2,np.pi/2,0.01); x=np.delete(x,np.where(x==0))
 X,Y=np.meshgrid(x,x)
 
 phi=np.zeros(np.shape(X))
@@ -272,16 +295,36 @@ nf,nc=np.shape(X)
 
 for i in range(nf):
     for j in range(nc):
-        if X[i,j]<0:
-            phi[i,j]=np.pi-np.abs(np.arctan(Y[i,j]/X[i,j]))
-        else:
-            phi[i,j]=np.abs(np.arctan(Y[i,j]/X[i,j]))
+        angle=np.abs(np.arctan(Y[i,j]/X[i,j]))
         
-Z=np.absolute(Fcomplex(r,phi,n))
+        if X[i,j]>0:
+            if Y[i,j]>0:
+                phi[i,j]=angle
+            elif Y[i,j]<0:
+                phi[i,j]=-angle
+                
+        elif X[i,j]<0:
+            if Y[i,j]>0:
+                phi[i,j]=np.pi-angle
+            elif Y[i,j]<0:
+                phi[i,j]=angle-np.pi
+
+
+
+Z=Fcomplex(r,phi,n)
+           
+Z=np.absolute(Z)
 Z=20*np.log10(Z/np.max(Z))
+
+for i in range(nf):
+    for j in range(nc):
+        if r[i,j]>np.pi/2 or Z[i,j]<-50:
+            Z[i,j]=-50
+
 
 fig = pl.figure(11)
 pl.imshow(Z)
+
 
 fig = pl.figure(12)
 ax = pl.axes(projection='3d')
@@ -292,8 +335,9 @@ ax.set_zlabel('Z')
 ax.grid(False)
 ax.set_visible(True)
 ax.set_zlim(-50,0)
-#pl.savefig('Proba3.png',dpi=500)
+pl.savefig('Proba.png',dpi=300)
 #ax.view_init(0, 0)'''
+
 
 
 
