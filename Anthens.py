@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import matplotlib.pyplot as pl
+from scipy.optimize import newton
 import scipy as sc
 from mpl_toolkits.mplot3d import Axes3D
 import time as time
@@ -26,7 +27,7 @@ def f0(x):
 i=0;g=0
 while zeros[-1]==0:
     try:
-        g=np.round(sc.optimize.newton(f, i),5)
+        g=np.round(newton(f, i),5)
         if (g in zeros)==False:
             if g>=0:
                 zeros[i]=g
@@ -215,13 +216,16 @@ pl.xlabel('u')
 pl.legend(loc='upper right')
 pl.xlim(0,np.pi)'''
 
-#Expansión 6.99
 
 uc=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129+1j*0]
-
 l=1; M=20; a=5 #Núemero de puntos e discos
+
 N=np.arange(1,M+1,1)*4*l
 
+
+#Expansión 6.99 -------------------------------------------------------------
+
+'''
 p=np.arange(1,M+1,1)*np.pi/M
 
 
@@ -252,23 +256,72 @@ pl.legend(loc='upper right')
 
 #Desenvolvemento 6.99 -------------------------------------------------------
 
-'''
+rmin=a/2
+rmax=a
+
 I=g0(p,n)
 I2=a*np.pi*I/(10*l) 
-
-k=np.arange(-20,20,1); k=np.delete(k,0)
-
+'''
 def Fcomplex(theta,phi,n): #Páxina 259
     aux=0+1j*0
     for m in range(M):
-        aux+=N[m]*I2[m]*sc.special.j0(2*a*np.sin(theta)*p[m])
         for n in range(N[m]):
-            for q in np.arange(1,20,1):
+            for q in np.arange(-20,21,1):
                 aux+=(1j)**q*I2[m]*sc.special.jn(q,2*a*np.sin(theta)*p[m])*np.e**(1j*q*(phi-beta[m,n]))
-            for q in np.arange(-1,-20,-1):
-                aux+=(1j)**q*I2[m]*sc.special.jn(q,2*a*np.sin(theta)*p[m])*np.e**(1j*q*(phi-beta[m,n]))
-    return aux
+    return aux'''
 
+
+x=np.arange(-a,a,0.01); x=np.delete(x,np.where(x==0))
+X,Y=np.meshgrid(x,x)
+
+beta=np.zeros(np.shape(X))
+rho=np.sqrt(X**2+Y**2)
+nf,nc=np.shape(X)
+
+for i in range(nf):
+    for j in range(nc):
+        angle=np.abs(np.arctan(Y[i,j]/X[i,j]))
+        
+        if X[i,j]>0:
+            if Y[i,j]>0:
+                beta[i,j]=angle
+            elif Y[i,j]<0:
+                beta[i,j]=-angle
+                
+        elif X[i,j]<0:
+            if Y[i,j]>0:
+                beta[i,j]=np.pi-angle
+            elif Y[i,j]<0:
+                beta[i,j]=angle-np.pi
+
+
+for i in range(nf):
+    for j in range(nc):
+        if 0<beta[i,j]<-np.pi/4:
+            if rho[i,j]>rmin:
+                rho[i,j]=0
+        if -np.pi/2<beta[i,j]<-3*np.pi/4:
+            if rho[i,j]>rmin:
+                rho[i,j]=0
+        if np.pi/4<beta[i,j]<np.pi/2:
+            if rho[i,j]>rmin:
+                rho[i,j]=0
+        if 3*np.pi/2<beta[i,j]<np.pi:
+            if rho[i,j]>rmin:
+                rho[i,j]=0
+        else:
+            if rho[i,j]>rmax:
+                rho[i,j]=0
+
+pl.figure(2)
+pl.imshow(rho)
+
+p=rho*np.pi/a
+
+I=g0(p,n)
+I2=a*np.pi*I/(10*l) 
+
+'''
 F1complex=np.absolute(Fcomplex(c,0,n))
 
 F1complex=20*np.log10(F1complex/np.max(F1complex))
@@ -285,13 +338,15 @@ pl.legend(loc='upper right')
 
 #Paso a 3D ------------------------------------------------------------------
 
-
+'''
 x=np.arange(-np.pi/2,np.pi/2,0.01); x=np.delete(x,np.where(x==0))
 X,Y=np.meshgrid(x,x)
 
 phi=np.zeros(np.shape(X))
 r=np.sqrt(X**2+Y**2)
 nf,nc=np.shape(X)
+
+#phi=beta
 
 for i in range(nf):
     for j in range(nc):
@@ -335,7 +390,7 @@ ax.set_zlabel('Z')
 ax.grid(False)
 ax.set_visible(True)
 ax.set_zlim(-50,0)
-pl.savefig('Proba.png',dpi=300)
+#pl.savefig('Proba2.png',dpi=300)
 #ax.view_init(0, 0)'''
 
 
