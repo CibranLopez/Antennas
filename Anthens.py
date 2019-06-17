@@ -221,14 +221,12 @@ uc=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129
 l=1; M=20; a=5 #Núemero de puntos e discos
 
 N=np.arange(1,M+1,1)*4*l
+p=np.arange(1,M+1,1)*np.pi/M
 
 
 #Expansión 6.99 -------------------------------------------------------------
 
 '''
-p=np.arange(1,M+1,1)*np.pi/M
-
-
 I=g0(p,n)
 I2=a*np.pi*I/(10*l) 
 
@@ -256,39 +254,44 @@ pl.legend(loc='upper right')
 
 #Desenvolvemento 6.99 -------------------------------------------------------
 
-rmin=a/2
-rmax=a
-
 I=g0(p,n)
 I2=a*np.pi*I/(10*l) 
 
-x=np.arange(-a,a,0.01); x=np.delete(x,np.where(x==0))
-Y,X=np.meshgrid(x,x)
+beta=np.zeros([M,np.max(N)])
 
-beta=np.zeros(np.shape(X))
-rho=np.sqrt(X**2+Y**2)
-nf,nc=np.shape(X)
+M2=3; tramos=4
 
-for i in range(nf):
-    for j in range(nc):
-        angle=np.abs(np.arctan(Y[i,j]/X[i,j]))
-        
-        if X[i,j]>0:
-            if Y[i,j]>0:
-                beta[i,j]=angle
-            elif Y[i,j]<0:
-                beta[i,j]=-angle
-                
-        elif X[i,j]<0:
-            if Y[i,j]>0:
-                beta[i,j]=np.pi-angle
-            elif Y[i,j]<0:
-                beta[i,j]=angle-np.pi
+for i in np.arange(M2,M,1):
+    N[i]=N[i]/2
+'''
+for i in range(M2):
+    aux=0
+    for j in range(N[i]):
+        beta[i,j]=aux
+        aux+=2*np.pi/N[i]
+      
+for i in np.arange(M2,M,1):
+    aux=0
+    for t in range(tramos):
+        for j in range(N[i]/(2*tramos)):
+            beta[i,j]=2*np.pi*t/tramos+aux
+            aux+=np.pi/N[i]'''
+
+for i in range(M2):
+    aux=0
+    if i<(M2-2):
+        tr=1
+    else:
+        tr=tramos
+    for t in range(tr):
+        for j in range(N[i]):
+            beta[i,j]=2*np.pi*t/tr+aux
+            aux=(7-tr)*np.pi/3
 
 
-pl.figure(1)
-pl.imshow(beta)
+#Así modificamos o raio, non o ángulo
 
+''' 
 for i in range(nf):
     for j in range(nc):
         if 0>beta[i,j]>-np.pi/4:
@@ -305,13 +308,7 @@ for i in range(nf):
                 rho[i,j]=0
         else:
             if rho[i,j]>rmax:
-                rho[i,j]=0
-
-
-p=rho*np.pi/a
-
-I=g0(p,n)
-I2=a*np.pi*I/(10*l) 
+                rho[i,j]=0'''
 
 
 
@@ -320,7 +317,7 @@ def Fcomplex_2(theta,phi,n):
     for m in range(M):
         for n in range(N[m]):
             for q in np.arange(-20,21,1):
-                aux+=(1j)**q*I2[m,n]*sc.special.jn(q,2*a*np.sin(theta)*p[m,n])*np.e**(1j*q*(phi-beta[m,n]))
+                aux+=(1j)**q*I2[m]*sc.special.jn(q,2*a*np.sin(theta)*p[m])*np.e**(1j*q*(phi-beta[m,n]))
     return aux
 
 
@@ -340,11 +337,34 @@ pl.legend(loc='upper right')
 
 
 #Paso a 3D ------------------------------------------------------------------
-
 '''
-phi=beta
+x=np.arange(-np.pi/2,np.pi/2,0.01); x=np.delete(x,np.where(x==0))
+X,Y=np.meshgrid(x,x)
 
-Z=Fcomplex(r,phi,n)
+phi=np.zeros(np.shape(X))
+r=np.sqrt(X**2+Y**2)
+nf,nc=np.shape(X)
+
+#phi=beta
+
+for i in range(nf):
+    for j in range(nc):
+        angle=np.abs(np.arctan(Y[i,j]/X[i,j]))
+        
+        if X[i,j]>0:
+            if Y[i,j]>0:
+                phi[i,j]=angle
+            elif Y[i,j]<0:
+                phi[i,j]=-angle
+                
+        elif X[i,j]<0:
+            if Y[i,j]>0:
+                phi[i,j]=np.pi-angle
+            elif Y[i,j]<0:
+                phi[i,j]=angle-np.pi
+
+
+Z=Fcomplex_2(r,phi,n)
            
 Z=np.absolute(Z)
 Z=20*np.log10(Z/np.max(Z))
