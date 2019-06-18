@@ -259,11 +259,10 @@ I2=a*np.pi*I/(10*l)
 
 beta=np.zeros([M,np.max(N)])
 
-M2=3; tramos=4
+M2=15; tramos=4  #Discos sen modificar
 
-for i in np.arange(M2,M,1):
-    N[i]=N[i]/2
-'''
+
+
 for i in range(M2):
     aux=0
     for j in range(N[i]):
@@ -275,40 +274,19 @@ for i in np.arange(M2,M,1):
     for t in range(tramos):
         for j in range(N[i]/(2*tramos)):
             beta[i,j]=2*np.pi*t/tramos+aux
-            aux+=np.pi/N[i]'''
-
-for i in range(M2):
+            aux+=np.pi/N[i]
+'''
+for i in range(M):
     aux=0
-    if i<(M2-2):
-        tr=1
-    else:
-        tr=tramos
-    for t in range(tr):
+    if i<(M2-1):
         for j in range(N[i]):
-            beta[i,j]=2*np.pi*t/tr+aux
-            aux=(7-tr)*np.pi/3
-
-
-#Así modificamos o raio, non o ángulo
-
-''' 
-for i in range(nf):
-    for j in range(nc):
-        if 0>beta[i,j]>-np.pi/4:
-            if rho[i,j]>rmin:
-                rho[i,j]=0
-        if -np.pi/2>beta[i,j]>-3*np.pi/4:
-            if rho[i,j]>rmin:
-                rho[i,j]=0
-        if np.pi/4<beta[i,j]<np.pi/2:
-            if rho[i,j]>rmin:
-                rho[i,j]=0
-        if np.pi*3/4<beta[i,j]<np.pi:
-            if rho[i,j]>rmin:
-                rho[i,j]=0
-        else:
-            if rho[i,j]>rmax:
-                rho[i,j]=0'''
+            beta[i,j]=aux
+            aux+=2*np.pi/N[i]
+    else:
+        for t in range(tramos):
+            for j in range(N[i]/(2*tramos)):
+                beta[i,j]=2*np.pi*t/tramos+aux
+                aux+=np.pi/N[i]'''
 
 
 
@@ -321,19 +299,21 @@ def Fcomplex_2(theta,phi,n):
     return aux
 
 
+pl.figure(10) 
 
 F2complex=np.absolute(Fcomplex_2(c,0,n))
-
 F2complex=20*np.log10(F2complex/np.max(F2complex))
-
-
-pl.figure(10) 
 pl.plot(c,F2complex,label=u'Fcomplex')
+F3complex=np.absolute(Fcomplex_2(c,np.pi/3,n))
+F3complex=20*np.log10(F3complex/np.max(F3complex))
+pl.plot(c,F3complex,label=u'Fcomplex')
+F4complex=np.absolute(Fcomplex_2(c,2*np.pi/3,n))
+F4complex=20*np.log10(F4complex/np.max(F4complex))
+pl.plot(c,F4complex,label=u'Fcomplex')
+
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
 pl.legend(loc='upper right')
-#pl.savefig('---.png',dpi=300)'''
-
 
 
 #Paso a 3D ------------------------------------------------------------------
