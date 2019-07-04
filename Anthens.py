@@ -223,13 +223,13 @@ l=1; M=20; a=5 #Núemero de puntos e discos
 N=np.arange(1,M+1,1)*4*l
 p=np.arange(1,M+1,1)*np.pi/M
 
+I=g0(p,n)
+I2=a*np.pi*I/(10*l)
+
 
 #Expansión 6.99 -------------------------------------------------------------
 
-'''
-I=g0(p,n)
-I2=a*np.pi*I/(10*l) 
-
+''' 
 def Fcomplex(theta,phi,n): #Páxina 259
     aux=0+1j*0
     for m in range(M):
@@ -253,14 +253,15 @@ pl.legend(loc='upper right')
 
 
 #Desenvolvemento 6.99 -------------------------------------------------------
+#Dúas sección modificadas, dúas non
+#Distribución complexa
 
-I=g0(p,n)
-I2=a*np.pi*I/(10*l) 
-
+'''
 beta=np.zeros([M,np.max(N)])
 
-M2=15; tramos=4  #Discos sen modificar
+M2=12; tramos=4  #Discos sen modificar
 
+print 'Círculos sen modificar:',M2
 
 
 for i in range(M2):
@@ -275,19 +276,6 @@ for i in np.arange(M2,M,1):
         for j in range(N[i]/(2*tramos)):
             beta[i,j]=2*np.pi*t/tramos+aux
             aux+=np.pi/N[i]
-'''
-for i in range(M):
-    aux=0
-    if i<(M2-1):
-        for j in range(N[i]):
-            beta[i,j]=aux
-            aux+=2*np.pi/N[i]
-    else:
-        for t in range(tramos):
-            for j in range(N[i]/(2*tramos)):
-                beta[i,j]=2*np.pi*t/tramos+aux
-                aux+=np.pi/N[i]'''
-
 
 
 def Fcomplex_2(theta,phi,n):
@@ -314,7 +302,45 @@ pl.plot(c,F4complex,label=u'Fcomplex')
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
 pl.legend(loc='upper right')
+#'''
 
+
+#Desenvolvemento 6.99 -------------------------------------------------------
+#Cada sección diferente, mesma distancia entre elemntos radiantes (non mesmo número, pois non constrolamos o radio)
+#Distribución real
+
+rmax=[1*a,0.2*a,0.3*a,0.6*a,1*a,0.4*a] #Radio máximo por gajo (en termos de a)
+l=len(rmax) #Número de gajos
+d=0.25 #distancia ente elementos
+
+N=np.zeros(num)
+
+for i in range(num):
+    N[i]=int(rmax[i]/d)
+
+beta=np.zeros([M,num])
+
+for i in range(num):
+    beta[i,:]=2*np.pi*i/num
+
+
+def Fcomplex_2(theta,phi,n):
+    aux=0+1j*0
+    for m in range(M):
+        for n in range(int(N[m])):
+            for q in np.arange(-20,21,1):
+                aux+=(1j)**q*I2[m]*sc.special.jn(q,2*a*np.sin(theta)*p[m])*np.e**(1j*q*(phi-beta[m,n]))
+    return aux
+
+
+pl.figure(10) 
+F2complex=np.absolute(Fcomplex_2(c,0,n))
+F2complex=20*np.log10(F2complex/np.max(F2complex))
+pl.plot(c,F2complex,label=u'Fcomplex')
+pl.xlim(0,np.pi/2)
+pl.ylim(-50,0)
+pl.legend(loc='upper right')
+#'''
 
 #Paso a 3D ------------------------------------------------------------------
 '''
