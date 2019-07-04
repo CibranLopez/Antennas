@@ -313,17 +313,25 @@ rmax=[1*a,0.2*a,0.3*a,0.6*a,1*a,0.4*a] #Radio máximo por gajo (en termos de a)
 l=len(rmax) #Número de gajos
 d=0.25 #distancia ente elementos
 
-N=np.zeros(num)
+beta=np.zeros([M,l])
 
-for i in range(num):
-    N[i]=int(rmax[i]/d)
+for n in range(l):
+    beta[:,n]=2*np.pi*n/l
 
-beta=np.zeros([M,num])
+elementos=np.zeros(l)
 
-for i in range(num):
-    beta[i,:]=2*np.pi*i/num
+for i in range(l):
+    elementos[i]=np.int(rmax[i]/d)
+
+N=np.zeros(M); m=0
+
+while m<M:
+    N[m]=np.count_nonzero(elementos)
+    m+=1
+    elementos[np.where(m==elementos)]=0
 
 
+'''
 def Fcomplex_2(theta,phi,n):
     aux=0+1j*0
     for m in range(M):
