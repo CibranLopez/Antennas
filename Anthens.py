@@ -37,7 +37,7 @@ while zeros[-1]==0:
 
 for i in range(n+1): 
     u[i]=zeros[n]*np.sqrt((A**2+(i-0.5)**2)/(A**2+(n-0.5)**2))    
-
+'''
 def G1(x,n):
     h1=1
     for j in np.arange(1,n):
@@ -53,7 +53,7 @@ F0=np.abs(G1(c,0))
 F=20*np.log10(F/max(F))
 F0=20*np.log10(F0/max(F0))
     
-'''
+
 pl.figure(1)
 pl.plot(c,F0,label=u'Apertura uniforme')
 pl.legend(loc='upper right')
@@ -103,7 +103,7 @@ pl.xlim(0,np.pi)
 pl.ylim(0,1)'''
 
 #Páxina 254 -----------------------------------------------------------------
-
+'''
 N=[4,8,16,20,28,32,40,44,52,56]
 
 d=0.5 #Distancia uniforme entre círculos
@@ -127,7 +127,7 @@ def F(theta,phi,n): #Páxina 253
 F1=np.abs(F(c,0,n))
 F1=20*np.log10(F1/max(F1))
 
-'''
+
 pl.figure(4) #Páxina 254
 pl.plot(c,F1,label=u'Discretización')
 pl.xlabel(r'$\theta$')
@@ -136,7 +136,7 @@ pl.legend(loc='upper right')
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)'''
 
-
+'''
 #Caso 1 ---------------------------------------------------------------------
 
 u=[0,1.4839, 1.8933, 2.9268, 3.9622, 5.0416]
@@ -177,7 +177,7 @@ distrbn=distrbn/np.max(distrbn)
 
 caso1=20*np.log10(caso1)
 caso2=20*np.log10(caso2)
-caso3=10*np.log10(caso3)
+caso3=10*np.log10(caso3)'''
 
 '''
 pl.figure(5) #Mesmo do principio, modificando diferente a posición dos raíces
@@ -217,7 +217,8 @@ pl.legend(loc='upper right')
 pl.xlim(0,np.pi)'''
 
 
-uc=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129+1j*0]
+#Quitando esto usamos distribucións reais de abertura
+u=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129+1j*0]
 l=1; M=20; a=5 #Núemero de puntos e discos
 
 N=np.arange(1,M+1,1)*4*l
@@ -291,13 +292,15 @@ pl.figure(10)
 
 F2complex=np.absolute(Fcomplex_2(c,0,n))
 F2complex=20*np.log10(F2complex/np.max(F2complex))
-pl.plot(c,F2complex,label=u'Fcomplex')
+pl.plot(c,F2complex,label=u'0')
+
 F3complex=np.absolute(Fcomplex_2(c,np.pi/3,n))
 F3complex=20*np.log10(F3complex/np.max(F3complex))
-pl.plot(c,F3complex,label=u'Fcomplex')
+pl.plot(c,F3complex,label=u'3pi')
+
 F4complex=np.absolute(Fcomplex_2(c,2*np.pi/3,n))
 F4complex=20*np.log10(F4complex/np.max(F4complex))
-pl.plot(c,F4complex,label=u'Fcomplex')
+pl.plot(c,F4complex,label=u'2pi/3')
 
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
@@ -309,29 +312,32 @@ pl.legend(loc='upper right')
 #Cada sección diferente, mesma distancia entre elemntos radiantes (non mesmo número, pois non constrolamos o radio)
 #Distribución real
 
-rmax=[1*a,0.2*a,0.3*a,0.6*a,1*a,0.4*a] #Radio máximo por gajo (en termos de a)
+rmax=[1*a,1*a,1*a,1*a,1*a,1*a,1*a,1*a] #Radio máximo por gajo (en termos de a)
 l=len(rmax) #Número de gajos
 d=0.25 #distancia ente elementos
 
-beta=np.zeros([M,l])
+beta=np.zeros([M,l]); elementos=np.zeros(l)
 
 for n in range(l):
-    beta[:,n]=2*np.pi*n/l
-
-elementos=np.zeros(l)
-
-for i in range(l):
-    elementos[i]=np.int(rmax[i]/d)
+    elementos[n]=np.int(rmax[n]/d)
 
 N=np.zeros(M); m=0
 
-while m<M:
-    N[m]=np.count_nonzero(elementos)
-    m+=1
-    elementos[np.where(m==elementos)]=0
+for m in range(M):
+    N[m]=np.count_nonzero(elementos) #N é azimutal, elementos radial
+    elementos[np.where((m+1)==elementos)]=0
 
+def pos_sup_max(a):
+    aux=np.max(a)
+    for i in range(len(a)):
+        if aux==a[i]:
+            a[i]=np.min(a)-1
+            return i
 
-'''
+for i in range(l):
+    beta[:,i]=2*np.pi*pos_sup_max(rmax)/l
+    
+
 def Fcomplex_2(theta,phi,n):
     aux=0+1j*0
     for m in range(M):
@@ -342,9 +348,19 @@ def Fcomplex_2(theta,phi,n):
 
 
 pl.figure(10) 
+
 F2complex=np.absolute(Fcomplex_2(c,0,n))
 F2complex=20*np.log10(F2complex/np.max(F2complex))
-pl.plot(c,F2complex,label=u'Fcomplex')
+pl.plot(c,F2complex,label=u'0')
+
+F3complex=np.absolute(Fcomplex_2(c,np.pi*4/3,n))
+F3complex=20*np.log10(F3complex/np.max(F3complex))
+pl.plot(c,F3complex,label=u'4pi/3')
+
+F4complex=np.absolute(Fcomplex_2(c,np.pi*5/3,n))
+F4complex=20*np.log10(F4complex/np.max(F4complex))
+pl.plot(c,F4complex,label=u'5pi/3')
+
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
 pl.legend(loc='upper right')
