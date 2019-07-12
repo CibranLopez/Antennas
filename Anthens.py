@@ -218,7 +218,7 @@ pl.xlim(0,np.pi)'''
 
 
 #Quitando esto usamos distribucións reais de abertura
-u=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129+1j*0]
+#u=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129+1j*0]
 l=1; M=20; a=5 #Núemero de puntos e discos
 
 N=np.arange(1,M+1,1)*4*l
@@ -310,9 +310,10 @@ pl.legend(loc='upper right')
 
 #Desenvolvemento 6.99 -------------------------------------------------------
 #Cada sección diferente, mesma distancia entre elemntos radiantes (non mesmo número, pois non constrolamos o radio)
-#Distribución real
 
-rmax=[1*a,1*a,1*a,1*a,1*a,1*a,1*a,1*a] #Radio máximo por gajo (en termos de a)
+#Ecuación do raio: rmax=a*(1+cos(beta))/2 beta=[0,np.pi/2]
+#Radio máximo por gajo (en termos de a)
+rmax=[1*a,0.96*a,0.85*a,0.69*a,0.5*a,0.69*a,0.85*a,0.96*a,a,0.96*a,0.85*a,0.69*a,0.5*a,0.69*a,0.85*a,0.96*a,a,0.96*a,0.85*a,0.69*a,0.5*a,0.69*a,0.85*a,0.96*a,a,0.96*a,0.85*a,0.69*a,0.5*a,0.69*a,0.85*a,0.96*a] 
 l=len(rmax) #Número de gajos
 d=0.25 #distancia ente elementos
 
@@ -346,7 +347,7 @@ def Fcomplex_2(theta,phi,n):
                 aux+=(1j)**q*I2[m]*sc.special.jn(q,2*a*np.sin(theta)*p[m])*np.e**(1j*q*(phi-beta[m,n]))
     return aux
 
-
+'''
 pl.figure(10) 
 
 F2complex=np.absolute(Fcomplex_2(c,0,n))
@@ -364,10 +365,10 @@ pl.plot(c,F4complex,label=u'5pi/3')
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
 pl.legend(loc='upper right')
-#'''
+#pl.savefig('Real.png',dpi=300)'''
 
 #Paso a 3D ------------------------------------------------------------------
-'''
+
 x=np.arange(-np.pi/2,np.pi/2,0.01); x=np.delete(x,np.where(x==0))
 X,Y=np.meshgrid(x,x)
 
@@ -418,7 +419,7 @@ ax.set_zlabel('Z')
 ax.grid(False)
 ax.set_visible(True)
 ax.set_zlim(-50,0)
-#pl.savefig('Proba2.png',dpi=300)
+pl.savefig('Proba3d.png',dpi=300)
 #ax.view_init(0, 0)'''
 
 
