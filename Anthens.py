@@ -9,7 +9,7 @@ import time as time
 t0=time.clock()
 
 #Parámetros
-s=float(-15)
+s=float(-25)
 n=6
 
 print 's=',s,'; n=',n
@@ -68,17 +68,19 @@ pl.xlim(0,np.pi)
 pl.ylim(0,1)'''
 
 
-#u=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129+1j*0]
-
+u=[0+1j*0, 0.5967+1j*0.5225, 1.7837+1j*0.5268, 3.6420+1j*0, 4.3039+1j*0, 5.2129+1j*0]
+'''
 #Ecuación do raio: rmax=a*(1+cos(beta))/2 beta=[0,np.pi/2]
 
-d=0.25 #Distancia ente elementos
-M=20; a=5 
+M=20; a=5; d=0.25 #Distancia ente elementos
 
 rmax=[1*a,0.99*a,0.96*a,0.92*a,0.85*a,0.78*a,0.69*a,0.6*a,0.5*a,0.6*a,0.69*a,0.78*a,0.85*a,0.92*a,0.96*a,0.99*a,a,0.99*a,0.96*a,0.92*a,0.85*a,0.78*a,0.69*a,0.6*a,0.5*a,0.6*a,0.69*a,0.78*a,0.85*a,0.92*a,0.96*a,0.99*a,a,0.99*a,0.96*a,0.92*a,0.85*a,0.78*a,0.69*a,0.6*a,0.5*a,0.6*a,0.69*a,0.78*a,0.85*a,0.92*a,0.96*a,0.99*a,a,0.99*a,0.96*a,0.92*a,0.85*a,0.78*a,0.69*a,0.6*a,0.5*a,0.6*a,0.69*a,0.78*a,0.85*a,0.92*a,0.96*a,0.99*a] 
+#rmax=[a,0.96*a,0.69*a,0.5*a,0.69*a,0.96*a,a,0.96*a,0.69*a,0.5*a,0.69*a,0.96*a,a,0.96*a,0.69*a,0.5*a,0.69*a,0.96*a,a,0.96*a,0.69*a,0.5*a,0.69*a,0.96*a] 
+
 lon=len(rmax) #Número de gajos
 
 p=np.arange(1,M+1,1)*np.pi/M
+
 I=np.real(g0(p,n))
 
 beta=np.zeros([M,lon]); elementos=np.zeros(lon); I2=np.zeros(M); N=np.zeros(M)
@@ -99,7 +101,7 @@ for m in range(M):
     elementos[np.where((m+1)==elementos)]=0
     I2[m]=2*a*p[m]*I[m]/N[m]
 
-def Fcomplex(theta,phi,n):
+def F1(theta,phi,n):
     aux=0+1j*0
     for m in range(M):
         for n in range(int(N[m])):
@@ -110,22 +112,61 @@ def Fcomplex(theta,phi,n):
 
 pl.figure(2) 
 
-F2complex=np.absolute(Fcomplex(c,0,n))
+F2complex=np.absolute(F1(c,0,n))
 F2complex=20*np.log10(F2complex/np.max(F2complex))
 pl.plot(c,F2complex,label=u'0')
 
-F3complex=np.absolute(Fcomplex(c,np.pi*4/3,n))
+F3complex=np.absolute(F1(c,np.pi*4/3,n))
 F3complex=20*np.log10(F3complex/np.max(F3complex))
 pl.plot(c,F3complex,label=u'4pi/3')
 
-F4complex=np.absolute(Fcomplex(c,np.pi*5/3,n))
+F4complex=np.absolute(F1(c,np.pi*5/3,n))
 F4complex=20*np.log10(F4complex/np.max(F4complex))
 pl.plot(c,F4complex,label=u'5pi/3')
 
 pl.xlim(0,np.pi/2)
 pl.ylim(-50,0)
 pl.legend(loc='upper right')
-#pl.savefig('Real.png',dpi=300)'''
+#pl.savefig('phi_cte.png',dpi=300)'''
+
+
+N=[12,12,11,11,10,8,6,6,5,5,4,2]
+M=12
+
+p=np.zeros([M,M]); I=np.zeros([M,M])
+
+for i in range(M):
+    for j in range(N[i]):
+        p[i,j]=np.sqrt((i+0.5)**2+(j+0.5)**2)*np.pi/M
+
+I=np.real(g0(p,n))
+
+def F2(theta,phi,n):
+    aux=0+1j*0
+    for i in range(M):
+        for j in range(N[i]):
+            aux+=I[i,j] * np.cos((i+0.5)*np.pi*np.sin(theta)*np.cos(phi)) * np.cos((j+0.5)*np.pi*np.sin(theta)*np.sin(phi))
+    return 4*aux
+
+
+f=np.absolute(F2(c,0,n))
+f=20*np.log10(f/np.max(f))
+pl.plot(c,f,label=u'0')
+
+f2=np.absolute(F2(c,np.pi*4/3,n))
+f2=20*np.log10(f2/np.max(f2))
+pl.plot(c,f2,label=u'4/3')
+
+f3=np.absolute(F2(c,np.pi*5/3,n))
+f3=20*np.log10(f3/np.max(f3))
+pl.plot(c,f3,label=u'5/3')
+
+pl.xlim(0,np.pi/2)
+pl.ylim(-50,0)
+pl.legend(loc='upper right')
+#pl.savefig('Cartesianas.png',dpi=300)'''
+
+
 
 #Paso a 3D ------------------------------------------------------------------
 '''
@@ -136,7 +177,6 @@ phi=np.zeros(np.shape(X))
 r=np.sqrt(X**2+Y**2)
 nf,nc=np.shape(X)
 
-#phi=beta
 
 for i in range(nf):
     for j in range(nc):
@@ -154,8 +194,18 @@ for i in range(nf):
             elif Y[i,j]<0:
                 phi[i,j]=angle-np.pi
 
+#for i in range(nf)  #Máis lento
+#    for j in range(nc):
+#        angle=np.abs(np.arctan(Y[i,j]/X[i,j]))
+        
+#        if X[i,j]>0:
+#            phi[i,j]=np.sign(Y[i,j])*angle
+                
+#        elif X[i,j]<0:
+#            phi[i,j]=np.sign(Y[i,j])*np.abs(np.pi-angle)
 
-Z=Fcomplex(r,phi,n)
+
+Z=F...(r,phi,n)
            
 Z=np.absolute(Z)
 Z=20*np.log10(Z/np.max(Z))
@@ -168,6 +218,7 @@ for i in range(nf):
 
 fig = pl.figure(3)
 pl.imshow(Z)
+pl.savefig('Corte_horizontal.png',dpi=300)
 
 
 fig = pl.figure(4)
@@ -179,7 +230,7 @@ ax.set_zlabel('Z')
 ax.grid(False)
 ax.set_visible(True)
 ax.set_zlim(-50,0)
-pl.savefig('Proba3d.png',dpi=300)
+pl.savefig('Proba3d_2.png',dpi=300)
 #ax.view_init(0, 0)'''
 
 
